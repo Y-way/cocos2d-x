@@ -1263,11 +1263,16 @@ void JSScheduleWrapper::scheduleFunc(float dt)
     JSB_AUTOCOMPARTMENT_WITH_GLOBAL_OBJCET
 
     JS::RootedValue callback(cx, getJSCallbackFunc());
-    if(!callback.isNullOrUndefined()) {
-        JS::HandleValueArray args = JS::HandleValueArray::fromMarkedLocation(1, &data);
-        JS::RootedValue retval(cx);
-        JS::RootedObject callbackTarget(cx, getJSCallbackThis().toObjectOrNull());
-        JS_CallFunctionValue(cx, callbackTarget, callback, args, &retval);
+    if(!callback.isNullOrUndefined()) 
+    {
+        auto exist = JSScheduleWrapper::getTargetForSchedule(callback);
+        if (exist)
+        {
+            JS::HandleValueArray args = JS::HandleValueArray::fromMarkedLocation(1, &data);
+            JS::RootedValue retval(cx);
+            JS::RootedObject target(cx, getJSCallbackThis().toObjectOrNull());
+            JS_CallFunctionValue(cx, target, callback, args, &retval);
+        }
     }
 }
 
