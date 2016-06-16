@@ -696,10 +696,19 @@
 		29080DE4191B595E0066F8DF /* UIWidgetAddNodeTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 29080D89191B595E0066F8DF /* UIWidgetAddNodeTest.cpp */; };
 		292CF01419A1965E00E8E6A0 /* UIEditBoxTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 292CF01219A1965E00E8E6A0 /* UIEditBoxTest.cpp */; };
 		292CF01519A1965E00E8E6A0 /* UIEditBoxTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 292CF01219A1965E00E8E6A0 /* UIEditBoxTest.cpp */; };
+		294D7D8A1D0E5093002CE7B7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
+		294D7D8B1D0E509A002CE7B7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
+		294D7D8C1D0E50A0002CE7B7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
+		294D7D8D1D0E50A6002CE7B7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
+		294D7D8E1D0E50AC002CE7B7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
+		294D7D8F1D0E50B2002CE7B7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
+		294D7D901D0E50B8002CE7B7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
+		294D7D911D0E50BF002CE7B7 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
 		295824591987415900F9746D /* UIScale9SpriteTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 295824571987415900F9746D /* UIScale9SpriteTest.cpp */; };
 		2958245A1987415900F9746D /* UIScale9SpriteTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 295824571987415900F9746D /* UIScale9SpriteTest.cpp */; };
 		298D7F6F19AC31F300FF096D /* UIWebViewTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 298D7F6D19AC31F300FF096D /* UIWebViewTest.cpp */; };
 		29AFEF6719ACCAA000F6B10A /* Test.html in Resources */ = {isa = PBXBuildFile; fileRef = 29AFEF6619ACCAA000F6B10A /* Test.html */; };
+		29DC5A201CFFE6E100CF2930 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */; };
 		38FA2E76194AECF800FF2BE4 /* ActionTimeline in Resources */ = {isa = PBXBuildFile; fileRef = 38FA2E75194AECF800FF2BE4 /* ActionTimeline */; };
 		38FA2E77194AECF800FF2BE4 /* ActionTimeline in Resources */ = {isa = PBXBuildFile; fileRef = 38FA2E75194AECF800FF2BE4 /* ActionTimeline */; };
 		3E2BDAD019BEA3410055CDCD /* NewAudioEngineTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3E2BDACE19BEA3410055CDCD /* NewAudioEngineTest.cpp */; };
@@ -896,7 +905,6 @@
 		507B41831C31BEA60067B53E /* ActionsTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AC3593218CECF0A00F37B72 /* ActionsTest.cpp */; };
 		507B41841C31BEA60067B53E /* ShaderTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AC35AED18CECF0C00F37B72 /* ShaderTest.cpp */; };
 		507B41851C31BEA60067B53E /* BillBoardTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B609E67119C18DAD003D0074 /* BillBoardTest.cpp */; };
-		507B41861C31BEA60067B53E /* Bug-PageViewLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94D793D71B4B7A3600F60F10 /* Bug-PageViewLayout.cpp */; };
 		507B41871C31BEA60067B53E /* TileMapTest2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C04F93581941B05400E9FEAB /* TileMapTest2.cpp */; };
 		507B41881C31BEA60067B53E /* Bug-624.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AC3598418CECF0B00F37B72 /* Bug-624.cpp */; };
 		507B41891C31BEA60067B53E /* SocketIOTest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1AC35A8018CECF0B00F37B72 /* SocketIOTest.cpp */; };
@@ -1235,8 +1243,6 @@
 		850F8A251B5F3A4F00780603 /* Bug-12847.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 850F8A221B5F3A4F00780603 /* Bug-12847.cpp */; };
 		94D793D91B4B7A3600F60F10 /* Bug-CCDrawNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94D793D51B4B7A3600F60F10 /* Bug-CCDrawNode.cpp */; };
 		94D793DA1B4B7A3600F60F10 /* Bug-CCDrawNode.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94D793D51B4B7A3600F60F10 /* Bug-CCDrawNode.cpp */; };
-		94D793DB1B4B7A3600F60F10 /* Bug-PageViewLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94D793D71B4B7A3600F60F10 /* Bug-PageViewLayout.cpp */; };
-		94D793DC1B4B7A3600F60F10 /* Bug-PageViewLayout.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 94D793D71B4B7A3600F60F10 /* Bug-PageViewLayout.cpp */; };
 		A05FCACA177C124500BE600E /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15C64822165F391E007D4F18 /* Cocoa.framework */; };
 		A07A521E1783A1D20073F6A7 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 15C6482E165F399D007D4F18 /* libz.dylib */; };
 		A07A521F1783A1D20073F6A7 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15C64832165F3AFD007D4F18 /* Foundation.framework */; };
@@ -2359,6 +2365,7 @@
 		298D7F6D19AC31F300FF096D /* UIWebViewTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = UIWebViewTest.cpp; path = UIWebViewTest/UIWebViewTest.cpp; sourceTree = "<group>"; };
 		298D7F6E19AC31F300FF096D /* UIWebViewTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = UIWebViewTest.h; path = UIWebViewTest/UIWebViewTest.h; sourceTree = "<group>"; };
 		29AFEF6619ACCAA000F6B10A /* Test.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = Test.html; path = "../tests/cpp-tests/Resources/Test.html"; sourceTree = "<group>"; };
+		29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
 		38FA2E75194AECF800FF2BE4 /* ActionTimeline */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ActionTimeline; path = "../tests/cpp-tests/Resources/ActionTimeline"; sourceTree = "<group>"; };
 		3E2BDACE19BEA3410055CDCD /* NewAudioEngineTest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NewAudioEngineTest.cpp; sourceTree = "<group>"; };
 		3E2BDACF19BEA3410055CDCD /* NewAudioEngineTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NewAudioEngineTest.h; sourceTree = "<group>"; };
@@ -2481,8 +2488,6 @@
 		850F8A231B5F3A4F00780603 /* Bug-12847.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bug-12847.h"; sourceTree = "<group>"; };
 		94D793D51B4B7A3600F60F10 /* Bug-CCDrawNode.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Bug-CCDrawNode.cpp"; sourceTree = "<group>"; };
 		94D793D61B4B7A3600F60F10 /* Bug-CCDrawNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bug-CCDrawNode.h"; sourceTree = "<group>"; };
-		94D793D71B4B7A3600F60F10 /* Bug-PageViewLayout.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Bug-PageViewLayout.cpp"; sourceTree = "<group>"; };
-		94D793D81B4B7A3600F60F10 /* Bug-PageViewLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "Bug-PageViewLayout.h"; sourceTree = "<group>"; };
 		A035A71117822E9E00987F6C /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		A07A52291783A1D20073F6A7 /* cpp-tests iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "cpp-tests iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A07A52B71783AE6D0073F6A7 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -2605,6 +2610,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D7D8E1D0E50AC002CE7B7 /* CoreText.framework in Frameworks */,
 				4B5C5BB01CA114C100D55A14 /* Security.framework in Frameworks */,
 				15427B7A198B87AA00DC375D /* libcocos2d iOS.a in Frameworks */,
 				15427B79198B879900DC375D /* libluacocos2d iOS.a in Frameworks */,
@@ -2651,6 +2657,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D7D8F1D0E50B2002CE7B7 /* CoreText.framework in Frameworks */,
 				4B5C5BB11CA114C700D55A14 /* Security.framework in Frameworks */,
 				18FC4D5F1B4257CD00B76F95 /* libsqlite3.dylib in Frameworks */,
 				185663F01B41569E009EF2AE /* libjscocos2d iOS.a in Frameworks */,
@@ -2714,6 +2721,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D7D8A1D0E5093002CE7B7 /* CoreText.framework in Frameworks */,
 				4B5C5BAC1CA114A300D55A14 /* Security.framework in Frameworks */,
 				1A0EE40318CDF775004CD58F /* libcocos2d iOS.a in Frameworks */,
 				1A0EE40618CDF775004CD58F /* CoreMotion.framework in Frameworks */,
@@ -2734,6 +2742,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D7D8C1D0E50A0002CE7B7 /* CoreText.framework in Frameworks */,
 				4B5C5BAE1CA114B500D55A14 /* Security.framework in Frameworks */,
 				ED545A761B68A1B600C3958E /* libiconv.dylib in Frameworks */,
 				15EFA68B198B3AD8000C57D3 /* libcocos2d iOS.a in Frameworks */,
@@ -2776,6 +2785,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D7D8B1D0E509A002CE7B7 /* CoreText.framework in Frameworks */,
 				4B5C5BAD1CA114AC00D55A14 /* Security.framework in Frameworks */,
 				52B47A351A53A43A004E4C60 /* Security.framework in Frameworks */,
 				15EFA66F198B356E000C57D3 /* libluacocos2d iOS.a in Frameworks */,
@@ -2818,6 +2828,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D7D8D1D0E50A6002CE7B7 /* CoreText.framework in Frameworks */,
 				4B5C5BAF1CA114BB00D55A14 /* Security.framework in Frameworks */,
 				3E61773D1960FBD200DE83F5 /* GameController.framework in Frameworks */,
 				3E6177221960FAED00DE83F5 /* libcocos2d iOS.a in Frameworks */,
@@ -2952,6 +2963,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D7D901D0E50B8002CE7B7 /* CoreText.framework in Frameworks */,
 				4B5C5BB21CA114CC00D55A14 /* Security.framework in Frameworks */,
 				50FC18C31C33725200DD15A3 /* libsqlite3.dylib in Frameworks */,
 				50FC18C41C33725200DD15A3 /* libjscocos2d iOS.a in Frameworks */,
@@ -2976,6 +2988,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				29DC5A201CFFE6E100CF2930 /* CoreText.framework in Frameworks */,
 				4B5C5BAB1CA1149900D55A14 /* Security.framework in Frameworks */,
 				ED545A731B68A1AC00C3958E /* libiconv.dylib in Frameworks */,
 				52B47A341A534B2B004E4C60 /* Security.framework in Frameworks */,
@@ -2998,6 +3011,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				294D7D911D0E50BF002CE7B7 /* CoreText.framework in Frameworks */,
 				4B5C5BB31CA114D400D55A14 /* Security.framework in Frameworks */,
 				FA94B0A31B8EF69A0074B261 /* libiconv.dylib in Frameworks */,
 				FA94B0A41B8EF69A0074B261 /* Security.framework in Frameworks */,
@@ -3552,8 +3566,6 @@
 			children = (
 				94D793D51B4B7A3600F60F10 /* Bug-CCDrawNode.cpp */,
 				94D793D61B4B7A3600F60F10 /* Bug-CCDrawNode.h */,
-				94D793D71B4B7A3600F60F10 /* Bug-PageViewLayout.cpp */,
-				94D793D81B4B7A3600F60F10 /* Bug-PageViewLayout.h */,
 				1AC3597718CECF0B00F37B72 /* Bug-1159.cpp */,
 				1AC3597818CECF0B00F37B72 /* Bug-1159.h */,
 				1AC3597918CECF0B00F37B72 /* Bug-1174.cpp */,
@@ -4736,6 +4748,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				29DC5A1E1CFFE5E700CF2930 /* CoreText.framework */,
 				4B5C5BB41CA114DB00D55A14 /* Security.framework */,
 				4B5C5BAA1CA1149900D55A14 /* Security.framework */,
 				ED545A721B68A1AC00C3958E /* libiconv.dylib */,
@@ -6745,7 +6758,6 @@
 				1AC35BEB18CECF0C00F37B72 /* CCControlSliderTest.cpp in Sources */,
 				1AC35C4D18CECF0C00F37B72 /* SpineTest.cpp in Sources */,
 				3E92EA821921A1400094CD21 /* Sprite3DTest.cpp in Sources */,
-				94D793DB1B4B7A3600F60F10 /* Bug-PageViewLayout.cpp in Sources */,
 				1AC35C1D18CECF0C00F37B72 /* NewRendererTest.cpp in Sources */,
 				50921EAF1B746D5F00C085CC /* DownloaderTest.cpp in Sources */,
 				1AC35B6718CECF0C00F37B72 /* AnimationsTestLayer.cpp in Sources */,
@@ -6963,7 +6975,6 @@
 				507B41831C31BEA60067B53E /* ActionsTest.cpp in Sources */,
 				507B41841C31BEA60067B53E /* ShaderTest.cpp in Sources */,
 				507B41851C31BEA60067B53E /* BillBoardTest.cpp in Sources */,
-				507B41861C31BEA60067B53E /* Bug-PageViewLayout.cpp in Sources */,
 				507B41871C31BEA60067B53E /* TileMapTest2.cpp in Sources */,
 				507B41881C31BEA60067B53E /* Bug-624.cpp in Sources */,
 				507B41891C31BEA60067B53E /* SocketIOTest.cpp in Sources */,
@@ -7180,7 +7191,6 @@
 				1AC35B2818CECF0C00F37B72 /* ActionsTest.cpp in Sources */,
 				1AC35C4A18CECF0C00F37B72 /* ShaderTest.cpp in Sources */,
 				B609E67419C18DAD003D0074 /* BillBoardTest.cpp in Sources */,
-				94D793DC1B4B7A3600F60F10 /* Bug-PageViewLayout.cpp in Sources */,
 				C04F935B1941B05400E9FEAB /* TileMapTest2.cpp in Sources */,
 				1AC35B4418CECF0C00F37B72 /* Bug-624.cpp in Sources */,
 				1AC35BF818CECF0C00F37B72 /* SocketIOTest.cpp in Sources */,

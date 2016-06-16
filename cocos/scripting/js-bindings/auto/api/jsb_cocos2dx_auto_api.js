@@ -150,6 +150,8 @@ getName : function (
 * @param {size_object} size
 * @param {cc.TextHAlignment} texthalignment
 * @param {cc.TextVAlignment} textvalignment
+* @param {bool} bool
+* @param {int} int
 * @return {bool|bool}
 */
 initWithString : function(
@@ -158,7 +160,9 @@ str,
 float,
 size,
 texthalignment,
-textvalignment 
+textvalignment,
+bool,
+int 
 )
 {
     return false;
@@ -15105,6 +15109,14 @@ getGravity : function (
 },
 
 /**
+ * @method resumeEmissions
+ */
+resumeEmissions : function (
+)
+{
+},
+
+/**
  * @method getTangentialAccel
  * @return {float}
  */
@@ -15132,6 +15144,14 @@ getSpeed : function (
 )
 {
     return 0;
+},
+
+/**
+ * @method pauseEmissions
+ */
+pauseEmissions : function (
+)
+{
 },
 
 /**
@@ -15674,6 +15694,16 @@ getLife : function (
 )
 {
     return 0;
+},
+
+/**
+ * @method isPaused
+ * @return {bool}
+ */
+isPaused : function (
+)
+{
+    return false;
 },
 
 /**
@@ -17482,14 +17512,6 @@ bool
  */
 setClearColor : function (
 color4f 
-)
-{
-},
-
-/**
- * @method endToLua
- */
-endToLua : function (
 )
 {
 },
