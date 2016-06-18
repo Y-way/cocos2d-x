@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2016 Google Inc.
+ Copyright (c) 2016 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,47 +23,34 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#ifndef CCVRDistortionMesh_hpp
+#define CCVRDistortionMesh_hpp
 
-#include "renderer/CCRenderCommand.h"
-#include "2d/CCCamera.h"
-#include "2d/CCNode.h"
+#include "platform/CCPlatformMacros.h"
 
 NS_CC_BEGIN
 
-RenderCommand::RenderCommand()
-: _type(RenderCommand::Type::UNKNOWN_COMMAND)
-, _globalOrder(0)
-, _isTransparent(true)
-, _skipBatching(false)
-, _is3D(false)
-, _depth(0)
-{
-}
+class Distortion;
 
-RenderCommand::~RenderCommand()
+class DistortionMesh
 {
-}
+public:
+    DistortionMesh();
+    DistortionMesh(Distortion *distortion,
+                   float screenWidth, float screenHeight,
+                   float xEyeOffsetScreen, float yEyeOffsetScreen,
+                   float textureWidth, float textureHeight,
+                   float xEyeOffsetTexture, float yEyeOffsetTexture,
+                   float viewportXTexture, float viewportYTexture,
+                   float viewportWidthTexture,
+                   float viewportHeightTexture,
+                   bool vignetteEnabled);
 
-void RenderCommand::init(float globalZOrder, const cocos2d::Mat4 &transform, uint32_t flags)
-{
-    _globalOrder = globalZOrder;
-    if (flags & Node::FLAGS_RENDER_AS_3D)
-    {
-        if (Camera::getVisitingCamera())
-            _depth = Camera::getVisitingCamera()->getDepthInView(transform);
-        
-        set3D(true);
-    }
-    else
-    {
-        set3D(false);
-        _depth = 0;
-    }
-}
-
-void RenderCommand::printID()
-{
-    printf("Command Depth: %f\n", _globalOrder);
-}
+    int _indices;
+    int _arrayBufferID;
+    int _elementBufferID;
+};
 
 NS_CC_END
+
+#endif /* CCVRDistortionMesh_h */

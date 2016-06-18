@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2016 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,47 +22,43 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#ifndef __CC_VR_PROTOCOL_H__
+#define __CC_VR_PROTOCOL_H__
 
-#include "renderer/CCRenderCommand.h"
-#include "2d/CCCamera.h"
-#include "2d/CCNode.h"
+#include <string>
+
+#include "base/ccTypes.h"
+#include "renderer/CCTexture2D.h"
 
 NS_CC_BEGIN
 
-RenderCommand::RenderCommand()
-: _type(RenderCommand::Type::UNKNOWN_COMMAND)
-, _globalOrder(0)
-, _isTransparent(true)
-, _skipBatching(false)
-, _is3D(false)
-, _depth(0)
-{
-}
+class Scene;
+class Renderer;
+class GLView;
 
-RenderCommand::~RenderCommand()
+class CC_DLL VRIHeadTracker
 {
-}
+public:
+    virtual ~VRIHeadTracker() {}
 
-void RenderCommand::init(float globalZOrder, const cocos2d::Mat4 &transform, uint32_t flags)
-{
-    _globalOrder = globalZOrder;
-    if (flags & Node::FLAGS_RENDER_AS_3D)
-    {
-        if (Camera::getVisitingCamera())
-            _depth = Camera::getVisitingCamera()->getDepthInView(transform);
-        
-        set3D(true);
-    }
-    else
-    {
-        set3D(false);
-        _depth = 0;
-    }
-}
+    // pose
+    virtual Vec3 getLocalPosition() = 0;
+    // rotation
+    virtual Mat4 getLocalRotation() = 0;
+};
 
-void RenderCommand::printID()
+class CC_DLL VRIRenderer
 {
-    printf("Command Depth: %f\n", _globalOrder);
-}
+public:
+    virtual ~VRIRenderer() {}
+
+    virtual void setup(GLView* glview) = 0;
+    virtual void cleanup() = 0;
+    virtual void render(Scene* scene, Renderer* renderer) = 0;
+    virtual VRIHeadTracker* getHeadTracker() = 0;
+};
+
 
 NS_CC_END
+
+#endif // __CC_VR_PROTOCOL_H__

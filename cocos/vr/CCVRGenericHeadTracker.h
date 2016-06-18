@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2016 Google Inc.
+ Copyright (c) 2016 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,47 +23,36 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#ifndef CCVRGenericHeadTracker_hpp
+#define CCVRGenericHeadTracker_hpp
 
-#include "renderer/CCRenderCommand.h"
-#include "2d/CCCamera.h"
-#include "2d/CCNode.h"
+#include "vr/CCVRProtocol.h"
+#include "math/Vec3.h"
+#include "math/Mat4.h"
 
 NS_CC_BEGIN
 
-RenderCommand::RenderCommand()
-: _type(RenderCommand::Type::UNKNOWN_COMMAND)
-, _globalOrder(0)
-, _isTransparent(true)
-, _skipBatching(false)
-, _is3D(false)
-, _depth(0)
+class CC_DLL VRGenericHeadTracker : public VRIHeadTracker
 {
-}
+public:
+    VRGenericHeadTracker();
+    virtual ~VRGenericHeadTracker();
 
-RenderCommand::~RenderCommand()
-{
-}
+    virtual Vec3 getLocalPosition();
+    virtual Mat4 getLocalRotation();
 
-void RenderCommand::init(float globalZOrder, const cocos2d::Mat4 &transform, uint32_t flags)
-{
-    _globalOrder = globalZOrder;
-    if (flags & Node::FLAGS_RENDER_AS_3D)
-    {
-        if (Camera::getVisitingCamera())
-            _depth = Camera::getVisitingCamera()->getDepthInView(transform);
-        
-        set3D(true);
-    }
-    else
-    {
-        set3D(false);
-        _depth = 0;
-    }
-}
+protected:
+    void startTracking();
+    void stopTracking();
 
-void RenderCommand::printID()
-{
-    printf("Command Depth: %f\n", _globalOrder);
-}
+    Vec3 _localPosition;
+
+    Mat4 _deviceToDisplay;
+    Mat4 _worldToInertialReferenceFrame;
+
+    void* _motionMgr;
+};
 
 NS_CC_END
+
+#endif /* CCVRGenericHeadTracker_hpp */

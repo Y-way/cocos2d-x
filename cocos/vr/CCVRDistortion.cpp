@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2016 Google Inc.
+ Copyright (c) 2016 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -22,47 +23,62 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-
-#include "renderer/CCRenderCommand.h"
-#include "2d/CCCamera.h"
-#include "2d/CCNode.h"
+#include "vr/CCVRDistortion.h"
+#include <math.h>
 
 NS_CC_BEGIN
 
-RenderCommand::RenderCommand()
-: _type(RenderCommand::Type::UNKNOWN_COMMAND)
-, _globalOrder(0)
-, _isTransparent(true)
-, _skipBatching(false)
-, _is3D(false)
-, _depth(0)
+Distortion::Distortion()
 {
+    _coefficients[0] = 0.441f;
+    _coefficients[1] = 0.156f;
 }
 
-RenderCommand::~RenderCommand()
+void Distortion::setCoefficients(float *coefficients)
 {
-}
-
-void RenderCommand::init(float globalZOrder, const cocos2d::Mat4 &transform, uint32_t flags)
-{
-    _globalOrder = globalZOrder;
-    if (flags & Node::FLAGS_RENDER_AS_3D)
+    for (int i = 0; i < s_numberOfCoefficients; i++)
     {
-        if (Camera::getVisitingCamera())
-            _depth = Camera::getVisitingCamera()->getDepthInView(transform);
-        
-        set3D(true);
-    }
-    else
-    {
-        set3D(false);
-        _depth = 0;
+        _coefficients[i] = coefficients[i];
     }
 }
 
-void RenderCommand::printID()
+float *Distortion::coefficients()
 {
-    printf("Command Depth: %f\n", _globalOrder);
+    return _coefficients;
+}
+
+float Distortion::distortionFactor(float radius)
+{
+    float result = 1.0f;
+    float rFactor = 1.0f;
+    float squaredRadius = radius * radius;
+    for (int i = 0; i < s_numberOfCoefficients; i++)
+    {
+        rFactor *= squaredRadius;
+        result += _coefficients[i] * rFactor;
+    }
+    return result;
+}
+
+float Distortion::distort(float radius)
+{
+    return radius * distortionFactor(radius);
+}
+
+float Distortion::distortInverse(float radius)
+{
+    float r0 = radius / 0.9f;
+    float r = radius * 0.9f;
+    float dr0 = radius - distort(r0);
+    while (fabsf(r - r0) > 0.0001f)
+    {
+        float dr = radius - distort(r);
+        float r2 = r - dr * ((r - r0) / (dr - dr0));
+        r0 = r;
+        r = r2;
+        dr0 = dr;
+    }
+    return r;
 }
 
 NS_CC_END
