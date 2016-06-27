@@ -614,10 +614,6 @@ std::string FileUtils::getStringFromFile(const std::string& filename)
 {
     std::string s;
     getContents(filename, &s);
-
-    // truncated
-    s.resize(strlen(s.data()));
-
     return s;
 }
 
@@ -654,7 +650,7 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
 
     if (readsize < size) {
         buffer->resize(readsize);
-        return Status::ReadFaild;
+        return Status::ReadFailed;
     }
 
     return Status::OK;
