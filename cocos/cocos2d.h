@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 // 0x00 HI ME LO
 // 00   03 08 00
-#define COCOS2D_VERSION 0x00031101
+#define COCOS2D_VERSION 0x00031200
 
 //
 // all cocos2d include files
@@ -300,6 +300,9 @@ THE SOFTWARE.
 #include "3d/CCSprite3D.h"
 #include "3d/CCSprite3DMaterial.h"
 #include "3d/CCTerrain.h"
+
+// vr
+#include "vr/CCVRGenericRenderer.h"
 
 
 // Deprecated

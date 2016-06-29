@@ -350,6 +350,9 @@
     <Filter Include="Classes\UITest\CocoStudioGUITest\UITabContorlTest">
       <UniqueIdentifier>{c6bd28ea-2696-4d05-90b2-2646ed934a49}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Classes\VRTests">
+      <UniqueIdentifier>{848aacea-a328-4797-9119-403b3c94d3d7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml" />
@@ -774,6 +777,9 @@
     <ClCompile Include="..\Classes\BugsTest\Bug-15594.cpp">
       <Filter>Classes\BugsTest</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\BugsTest\Bug-15776.cpp">
+      <Filter>Classes\BugsTest</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\CurlTest\CurlTest.cpp">
       <Filter>Classes\CurlTest</Filter>
     </ClCompile>
@@ -790,6 +796,9 @@
       <Filter>Classes\UITest\CocoStudioGUITest\UITabContorlTest</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\SpriteFrameCacheTest\SpriteFrameCacheTest.cpp" />
+    <ClCompile Include="..\Classes\VRTest\VRTest.cpp">
+      <Filter>Classes\VRTests</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.xaml.h" />
@@ -1412,6 +1421,9 @@
     <ClInclude Include="..\Classes\BugsTest\Bug-15594.h">
       <Filter>Classes\BugsTest</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\BugsTest\Bug-15776.h">
+      <Filter>Classes\BugsTest</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\CurlTest\CurlTest.h">
       <Filter>Classes\CurlTest</Filter>
     </ClInclude>
@@ -1431,6 +1443,9 @@
     <ClInclude Include="..\Classes\CocosStudio3DTest\CocosStudio3DTest.h" />
     <ClInclude Include="..\Classes\UITest\CocoStudioGUITest\CocoStudioGUITest.h" />
     <ClInclude Include="..\Classes\UITest\CocoStudioGUITest\UITextTest\UITextTest_Editor.h" />
+    <ClInclude Include="..\Classes\VRTest\VRTest.h">
+      <Filter>Classes\VRTests</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest" />

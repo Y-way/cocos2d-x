@@ -614,10 +614,6 @@ std::string FileUtils::getStringFromFile(const std::string& filename)
 {
     std::string s;
     getContents(filename, &s);
-
-    // truncated
-    s.resize(strlen(s.data()));
-
     return s;
 }
 
@@ -654,7 +650,7 @@ FileUtils::Status FileUtils::getContents(const std::string& filename, ResizableB
 
     if (readsize < size) {
         buffer->resize(readsize);
-        return Status::ReadFaild;
+        return Status::ReadFailed;
     }
 
     return Status::OK;
@@ -1008,7 +1004,7 @@ bool FileUtils::isDirectoryExist(const std::string& dirPath) const
         for (const auto& resolutionIt : _searchResolutionsOrderArray)
         {
             // searchPath + file_path + resourceDirectory
-            fullpath = searchIt + dirPath + resolutionIt;
+            fullpath = fullPathForFilename(searchIt + dirPath + resolutionIt);
             if (isDirectoryExistInternal(fullpath))
             {
                 _fullPathCache.insert(std::make_pair(dirPath, fullpath));

@@ -33,6 +33,7 @@ LOCAL_SRC_FILES := main.cpp \
 ../../Classes/BugsTest/Bug-914.cpp \
 ../../Classes/BugsTest/Bug-12847.cpp \
 ../../Classes/BugsTest/Bug-15594.cpp \
+../../Classes/BugsTest/Bug-15776.cpp \
 ../../Classes/BugsTest/Bug-Child.cpp \
 ../../Classes/BugsTest/BugsTest.cpp \
 ../../Classes/Camera3DTest/Camera3DTest.cpp \
@@ -151,6 +152,7 @@ LOCAL_SRC_FILES := main.cpp \
 ../../Classes/UserDefaultTest/UserDefaultTest.cpp \
 ../../Classes/VisibleRect.cpp \
 ../../Classes/VibrateTest/VibrateTest.cpp \
+../../Classes/VRTest/VRTest.cpp \
 ../../Classes/ZwoptexTest/ZwoptexTest.cpp \
 ../../Classes/SpriteFrameCacheTest/SpriteFrameCacheTest.cpp \
 ../../Classes/controller.cpp \
