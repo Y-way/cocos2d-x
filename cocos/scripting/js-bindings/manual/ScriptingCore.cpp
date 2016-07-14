@@ -388,7 +388,7 @@ bool JSB_closeWindow(JSContext *cx, uint32_t argc, jsval *vp)
 {
     EventListenerCustom* _event = Director::getInstance()->getEventDispatcher()->addCustomEventListener(Director::EVENT_AFTER_DRAW, [&](EventCustom *event) {
         Director::getInstance()->getEventDispatcher()->removeEventListener(_event);
-        _event->release();
+        CC_SAFE_RELEASE(_event);
         
         ScriptingCore::getInstance()->cleanup();
     });
@@ -701,7 +701,7 @@ JS::PersistentRootedScript* ScriptingCore::compileScript(const char *path, JS::H
     // a) check jsc file first
     std::string byteCodePath = RemoveFileExt(std::string(path)) + BYTE_CODE_FILE_EXT;
 
-    // Check whether '.jsc' files exist to avoid outputing log which says 'couldn't find .jsc file'.
+    // Check whether '.jsc' files exist to avoid outputting log which says 'couldn't find .jsc file'.
     if (futil->isFileExist(byteCodePath))
     {
         Data data = futil->getDataFromFile(byteCodePath);

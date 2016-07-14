@@ -948,6 +948,7 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, const std::stri
         child->setName(name);
     
     child->setParent(this);
+    child->setCameraMask(getCameraMask());
 
     if( _running )
     {
@@ -1140,7 +1141,7 @@ void Node::sortAllChildren()
 {
     if (_reorderChildDirty)
     {
-        std::sort(std::begin(_children), std::end(_children), nodeComparisonLess);
+        std::stable_sort(std::begin(_children), std::end(_children), nodeComparisonLess);
         _reorderChildDirty = false;
     }
 }
@@ -1750,7 +1751,7 @@ const Mat4& Node::getNodeToParentTransform() const
         // at some point setNodeToParentTransform() is called.
         // and later setAdditionalTransform() is called every time. And since _transform
         // is being overwritten everyframe, _additionalTransform[1] is used to have a copy
-        // of the last "_trasform without _additionalTransform"
+        // of the last "_transform without _additionalTransform"
         if (_transformDirty)
             _additionalTransform[1] = _transform;
 
