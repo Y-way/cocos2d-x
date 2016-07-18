@@ -948,6 +948,7 @@ void Node::addChildHelper(Node* child, int localZOrder, int tag, const std::stri
         child->setName(name);
     
     child->setParent(this);
+    child->setCameraMask(getCameraMask());
 
     if( _running )
     {
@@ -1140,7 +1141,7 @@ void Node::sortAllChildren()
 {
     if (_reorderChildDirty)
     {
-        std::sort(std::begin(_children), std::end(_children), nodeComparisonLess);
+        std::stable_sort(std::begin(_children), std::end(_children), nodeComparisonLess);
         _reorderChildDirty = false;
     }
 }
