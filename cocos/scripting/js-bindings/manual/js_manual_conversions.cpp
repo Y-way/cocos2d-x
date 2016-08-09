@@ -1,7 +1,7 @@
 /*
  * Created by Rohan Kuruvilla
  * Copyright (c) 2012 Zynga Inc.
- * Copyright (c) 2013-2014 Chukong Technologies Inc.
+ * Copyright (c) 2013-2016 Chukong Technologies Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -1847,7 +1847,7 @@ jsval ccarray_to_jsval(JSContext* cx, __Array *arr)
             }  else if ((boolVal = dynamic_cast<__Bool*>(obj))) {
                 arrElement = BOOLEAN_TO_JSVAL(boolVal->getValue() ? true : false);
             } else {
-                CCASSERT(false, "the type isn't suppored.");
+                CCASSERT(false, "the type isn't supported.");
             }
         }
         if (!JS_SetElement(cx, jsretArr, i, arrElement)) {
@@ -1899,7 +1899,7 @@ jsval ccdictionary_to_jsval(JSContext* cx, __Dictionary* dict)
             } else if ((boolVal = dynamic_cast<__Bool*>(obj))) {
                 dictElement = BOOLEAN_TO_JSVAL(boolVal->getValue() ? true : false);
             } else {
-                CCASSERT(false, "the type isn't suppored.");
+                CCASSERT(false, "the type isn't supported.");
             }
         }
         const char* key = pElement->getStrKey();

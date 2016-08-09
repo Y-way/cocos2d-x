@@ -2,7 +2,7 @@
 Copyright (c) 2008-2010 Ricardo Quesada
 Copyright (c) 2010-2012 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
-Copyright (c) 2013-2014 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -82,6 +82,9 @@ public:
      */
     CC_DEPRECATED_ATTRIBUTE static void reloadAllTextures();
 
+    // ETC1 ALPHA supports.
+    static void setETC1AlphaFileSuffix(const std::string& suffix);
+
 public:
     /**
      * @js ctor
@@ -98,7 +101,7 @@ public:
      */
     virtual std::string getDescription() const;
 
-//    Dictionary* snapshotTextures();
+    // Dictionary* snapshotTextures();
 
     /** Returns a Texture2D object given an filename.
     * If the filename was not previously loaded, it will create a new Texture2D.
@@ -237,6 +240,8 @@ protected:
     int _asyncRefCount;
 
     std::unordered_map<std::string, Texture2D*> _textures;
+
+    static std::string s_etc1AlphaFileSuffix;
 };
 
 #if CC_ENABLE_CACHE_TEXTURE_DATA

@@ -29,6 +29,16 @@ getMaxT : function (
 },
 
 /**
+ * @method setAlphaTexture
+ * @param {cc.Texture2D} arg0
+ */
+setAlphaTexture : function (
+texture2d 
+)
+{
+},
+
+/**
  * @method getStringForFormat
  * @return {char}
  */
@@ -115,6 +125,16 @@ int
  * @return {int}
  */
 getPixelsHigh : function (
+)
+{
+    return 0;
+},
+
+/**
+ * @method getAlphaTextureName
+ * @return {unsigned int}
+ */
+getAlphaTextureName : function (
 )
 {
     return 0;
@@ -2036,6 +2056,14 @@ getScale : function (
 )
 {
     return 0;
+},
+
+/**
+ * @method updateOrderOfArrival
+ */
+updateOrderOfArrival : function (
+)
+{
 },
 
 /**
@@ -4248,11 +4276,13 @@ glprogram
 
 /**
  * @method getOrCreateWithGLProgramName
- * @param {String} arg0
- * @return {cc.GLProgramState}
- */
-getOrCreateWithGLProgramName : function (
-str 
+* @param {String|String} str
+* @param {cc.Texture2D} texture2d
+* @return {cc.GLProgramState|cc.GLProgramState}
+*/
+getOrCreateWithGLProgramName : function(
+str,
+texture2d 
 )
 {
     return cc.GLProgramState;
@@ -6464,6 +6494,16 @@ value
 gatherGPUInfo : function (
 )
 {
+},
+
+/**
+ * @method supportsMapBuffer
+ * @return {bool}
+ */
+supportsMapBuffer : function (
+)
+{
+    return false;
 },
 
 /**
@@ -21421,6 +21461,16 @@ texture2d
  * @method waitForQuit
  */
 waitForQuit : function (
+)
+{
+},
+
+/**
+ * @method setETC1AlphaFileSuffix
+ * @param {String} arg0
+ */
+setETC1AlphaFileSuffix : function (
+str 
 )
 {
 },

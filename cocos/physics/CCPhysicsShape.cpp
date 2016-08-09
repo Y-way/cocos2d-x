@@ -286,13 +286,18 @@ void PhysicsShape::recenterPoints(Vec2* points, int count, const Vec2& center)
     }
 }
 
-Vec2 PhysicsShape::getPolyonCenter(const Vec2* points, int count)
+Vec2 PhysicsShape::getPolygonCenter(const Vec2* points, int count)
 {
     cpVect* cpvs = new (std::nothrow) cpVect[count];
     cpVect center = cpCentroidForPoly(count, PhysicsHelper::points2cpvs(points, cpvs, count));
     delete[] cpvs;
     
     return PhysicsHelper::cpv2point(center);
+}
+
+Vec2 PhysicsShape::getPolyonCenter(const Vec2* points, int count)
+{
+    return getPolygonCenter(points, count);
 }
 
 void PhysicsShape::setBody(PhysicsBody *body)
@@ -551,7 +556,7 @@ bool PhysicsShapePolygon::init(const Vec2* points, int count, const PhysicsMater
 {
     do
     {
-        _type = Type::POLYGEN;
+        _type = Type::POLYGON;
         
         auto vecs = new (std::nothrow) cpVect[count];
         PhysicsHelper::points2cpvs(points, vecs, count);        //count = cpConvexHull((int)count, vecs, nullptr, nullptr, 0);
@@ -763,7 +768,7 @@ bool PhysicsShapeEdgePolygon::init(const Vec2* points, int count, const PhysicsM
     cpVect* vec = nullptr;
     do
     {
-        _type = Type::EDGEPOLYGEN;
+        _type = Type::EDGEPOLYGON;
         
         vec = new (std::nothrow) cpVect[count];
         PhysicsHelper::points2cpvs(points, vec, count);

@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2013-2014 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -365,6 +365,10 @@ public class Cocos2dxHelper {
 
     public static void rewindBackgroundMusic() {
         Cocos2dxHelper.sCocos2dMusic.rewindBackgroundMusic();
+    }
+
+    public static boolean willPlayBackgroundMusic() {
+        return Cocos2dxHelper.sCocos2dMusic.willPlayBackgroundMusic();
     }
 
     public static boolean isBackgroundMusicPlaying() {
