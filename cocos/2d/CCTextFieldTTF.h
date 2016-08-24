@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2013-2014 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -227,7 +227,7 @@ public:
      */
     virtual void setSecureTextEntry(bool value);
     virtual void setPasswordTextStyle(const std::string& text);
-    std::string getPasswordTextStyle() const;
+    const std::string& getPasswordTextStyle() const;
 
     /**
      * Query whether the currently display mode is secure text entry or not.

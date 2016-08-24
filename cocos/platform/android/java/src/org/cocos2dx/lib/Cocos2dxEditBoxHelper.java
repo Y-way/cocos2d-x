@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2013-2015 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -258,7 +258,7 @@ public class Cocos2dxEditBoxHelper {
                     }else{
                         tf = Typeface.DEFAULT;
                     }
-                    //TODO: The font size is not the same across all the anroid devices...
+                    // TODO: The font size is not the same across all the android devices...
                     if (fontSize >= 0){
                         float density =  mCocos2dxActivity.getResources().getDisplayMetrics().density;
 //                        Log.e("XXX", "density is " + density);

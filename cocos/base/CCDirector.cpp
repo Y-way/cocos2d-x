@@ -2,7 +2,7 @@
 Copyright (c) 2008-2010 Ricardo Quesada
 Copyright (c) 2010-2013 cocos2d-x.org
 Copyright (c) 2011      Zynga Inc.
-Copyright (c) 2013-2015 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -81,7 +81,7 @@ NS_CC_BEGIN
 // FIXME: it should be a Director ivar. Move it there once support for multiple directors is added
 
 // singleton stuff
-static DisplayLinkDirector *s_SharedDirector = nullptr;
+static Director *s_SharedDirector = nullptr;
 
 #define kDefaultFPS        60  // 60 frames per second
 extern const char* cocos2dVersion(void);
@@ -97,7 +97,7 @@ Director* Director::getInstance()
 {
     if (!s_SharedDirector)
     {
-        s_SharedDirector = new (std::nothrow) DisplayLinkDirector();
+        s_SharedDirector = new (std::nothrow) Director;
         CCASSERT(s_SharedDirector, "FATAL: Not enough memory");
         s_SharedDirector->init();
     }
@@ -107,6 +107,7 @@ Director* Director::getInstance()
 
 Director::Director()
 : _isStatusLabelUpdated(true)
+, _invalid(true)
 {
 }
 
@@ -127,7 +128,7 @@ bool Director::init(void)
     _frameRate = 0.0f;
     _FPSLabel = _drawnBatchesLabel = _drawnVerticesLabel = nullptr;
     _totalFrames = 0;
-    _lastUpdate = new (std::nothrow) struct timeval;
+    _lastUpdate = std::chrono::steady_clock::now();
     _secondsPerFrame = 1.0f;
 
     // paused ?
@@ -204,9 +205,6 @@ Director::~Director(void)
 
     CC_SAFE_RELEASE(_eventDispatcher);
     
-    // delete _lastUpdate
-    CC_SAFE_DELETE(_lastUpdate);
-
     Configuration::destroyInstance();
 
     s_SharedDirector = nullptr;
@@ -256,14 +254,6 @@ void Director::setGLDefaultValues()
     setAlphaBlending(true);
     setDepthTest(false);
     setProjection(_projection);
-
-    // Everything should be drawn within `Scene::render()`.
-    // Otherwise it might not render correctly since the GL state might not be the correct one
-    // so the FPS should be part of Scene. But until we move them there, this little hack is to
-    // set the default glViewPort(), so that when `Scene::render()` exits, the viewport is the correct
-    // one for the FPS
-    auto vp = Camera::getDefaultViewport();
-    glViewport(vp._left, vp._bottom, vp._width, vp._height);
 }
 
 // Draw the Scene
@@ -343,14 +333,7 @@ void Director::drawScene()
 
 void Director::calculateDeltaTime()
 {
-    struct timeval now;
-
-    if (gettimeofday(&now, nullptr) != 0)
-    {
-        CCLOG("error in gettimeofday");
-        _deltaTime = 0;
-        return;
-    }
+    auto now = std::chrono::steady_clock::now();
 
     // new delta time. Re-fixed issue #1277
     if (_nextDeltaTimeZero)
@@ -360,7 +343,7 @@ void Director::calculateDeltaTime()
     }
     else
     {
-        _deltaTime = (now.tv_sec - _lastUpdate->tv_sec) + (now.tv_usec - _lastUpdate->tv_usec) / 1000000.0f;
+        _deltaTime = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastUpdate).count() / 1000000.0f;
         _deltaTime = MAX(0, _deltaTime);
     }
 
@@ -372,7 +355,7 @@ void Director::calculateDeltaTime()
     }
 #endif
 
-    *_lastUpdate = now;
+    _lastUpdate = now;
 }
 float Director::getDeltaTime() const
 {
@@ -499,7 +482,7 @@ void Director::popMatrix(MATRIX_STACK_TYPE type)
     }
     else
     {
-        CCASSERT(false, "unknow matrix stack type");
+        CCASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -519,7 +502,7 @@ void Director::loadIdentityMatrix(MATRIX_STACK_TYPE type)
     }
     else
     {
-        CCASSERT(false, "unknow matrix stack type");
+        CCASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -539,7 +522,7 @@ void Director::loadMatrix(MATRIX_STACK_TYPE type, const Mat4& mat)
     }
     else
     {
-        CCASSERT(false, "unknow matrix stack type");
+        CCASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -559,7 +542,7 @@ void Director::multiplyMatrix(MATRIX_STACK_TYPE type, const Mat4& mat)
     }
     else
     {
-        CCASSERT(false, "unknow matrix stack type");
+        CCASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -579,7 +562,7 @@ void Director::pushMatrix(MATRIX_STACK_TYPE type)
     }
     else
     {
-        CCASSERT(false, "unknow matrix stack type");
+        CCASSERT(false, "unknown matrix stack type");
     }
 }
 
@@ -598,13 +581,19 @@ const Mat4& Director::getMatrix(MATRIX_STACK_TYPE type) const
         return _textureMatrixStack.top();
     }
 
-    CCASSERT(false, "unknow matrix stack type, will return modelview matrix instead");
+    CCASSERT(false, "unknown matrix stack type, will return modelview matrix instead");
     return  _modelViewMatrixStack.top();
 }
 
 void Director::setProjection(Projection projection)
 {
     Size size = _winSizeInPoints;
+
+    if (size.width == 0 || size.height == 0)
+    {
+        CCLOGERROR("cocos2d: warning, Director::setProjection() failed because size is 0");
+        return;
+    }
 
     setViewport();
 
@@ -993,6 +982,15 @@ void Director::reset()
         _eventDispatcher->removeAllEventListeners();
     }
     
+    if(_notificationNode)
+    {
+        _notificationNode->onExit();
+        _notificationNode->cleanup();
+        _notificationNode->release();
+    }
+    
+    _notificationNode = nullptr;
+    
     // remove all objects, but don't release it.
     // runWithScene might be executed after 'end'.
 #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
@@ -1224,10 +1222,9 @@ void Director::calculateMPF()
     static float prevSecondsPerFrame = 0;
     static const float MPF_FILTER = 0.10f;
 
-    struct timeval now;
-    gettimeofday(&now, nullptr);
+    auto now = std::chrono::steady_clock::now();
     
-    _secondsPerFrame = (now.tv_sec - _lastUpdate->tv_sec) + (now.tv_usec - _lastUpdate->tv_usec) / 1000000.0f;
+    _secondsPerFrame = std::chrono::duration_cast<std::chrono::microseconds>(now - _lastUpdate).count() / 1000000.0f;
 
     _secondsPerFrame = _secondsPerFrame * MPF_FILTER + (1-MPF_FILTER) * prevSecondsPerFrame;
     prevSecondsPerFrame = _secondsPerFrame;
@@ -1369,19 +1366,9 @@ void Director::setEventDispatcher(EventDispatcher* dispatcher)
     }
 }
 
-/***************************************************
-* implementation of DisplayLinkDirector
-**************************************************/
-
-// should we implement 4 types of director ??
-// I think DisplayLinkDirector is enough
-// so we now only support DisplayLinkDirector
-void DisplayLinkDirector::startAnimation()
+void Director::startAnimation()
 {
-    if (gettimeofday(_lastUpdate, nullptr) != 0)
-    {
-        CCLOG("cocos2d: DisplayLinkDirector: Error on gettimeofday");
-    }
+    _lastUpdate = std::chrono::steady_clock::now();
 
     _invalid = false;
 
@@ -1393,7 +1380,7 @@ void DisplayLinkDirector::startAnimation()
     setNextDeltaTimeZero(true);
 }
 
-void DisplayLinkDirector::mainLoop()
+void Director::mainLoop()
 {
     if (_purgeDirectorInNextLoop)
     {
@@ -1414,12 +1401,12 @@ void DisplayLinkDirector::mainLoop()
     }
 }
 
-void DisplayLinkDirector::stopAnimation()
+void Director::stopAnimation()
 {
     _invalid = true;
 }
 
-void DisplayLinkDirector::setAnimationInterval(float interval)
+void Director::setAnimationInterval(float interval)
 {
     _animationInterval = interval;
     if (! _invalid)

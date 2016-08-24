@@ -1,5 +1,5 @@
 /****************************************************************************
- Copyright (c) 2013-2014 Chukong Technologies Inc.
+ Copyright (c) 2013-2016 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -144,8 +144,8 @@ public:
     static const int VBO_SIZE = 65536;
     /**The max number of indices in a index buffer.*/
     static const int INDEX_VBO_SIZE = VBO_SIZE * 6 / 4;
-    /**The rendercommands which can be batched will be saved into a list, this is the reversed size of this list.*/
-    static const int BATCH_TRIAGCOMMAND_RESEVER_SIZE = 64;
+    /**The rendercommands which can be batched will be saved into a list, this is the reserved size of this list.*/
+    static const int BATCH_TRIAGCOMMAND_RESERVED_SIZE = 64;
     /**Reserved for material id, which means that the command could not be batched.*/
     static const int MATERIAL_ID_DO_NOT_BATCH = 0;
     /**Constructor.*/

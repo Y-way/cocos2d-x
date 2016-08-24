@@ -1,7 +1,7 @@
 /****************************************************************************
 Copyright (c) 2008      Apple Inc. All Rights Reserved.
 Copyright (c) 2010-2012 cocos2d-x.org
-Copyright (c) 2013-2014 Chukong Technologies Inc.
+Copyright (c) 2013-2016 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -410,6 +410,9 @@ public:
 
     std::string getPath()const { return _filePath; }
 
+    void setAlphaTexture(Texture2D* alphaTexture);
+
+    GLuint getAlphaTextureName() const;
 public:
     /** Get pixel info map, the key-value pairs is PixelFormat and PixelFormatInfo.*/
     static const PixelFormatInfoMap& getPixelFormatInfoMap();
@@ -547,6 +550,8 @@ protected:
 
     bool _valid;
     std::string _filePath;
+
+    Texture2D* _alphaTexture;
 };
 
 
