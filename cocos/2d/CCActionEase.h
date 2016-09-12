@@ -93,12 +93,12 @@ public:
     @brief Set the rate value for the ease rate action.
     @param rate The value will be set.
     */
-    inline void setRate(float rate) { _rate = rate; }
+    void setRate(float rate) { _rate = rate; }
     /**
     @brief Get the rate value of the ease rate action.
     @return Return the rate value of the ease rate action.
     */
-    inline float getRate() const { return _rate; }
+    float getRate() const { return _rate; }
 
 CC_CONSTRUCTOR_ACCESS:
     EaseRateAction() {}
@@ -136,14 +136,6 @@ public: \
 private: \
     CC_DISALLOW_COPY_AND_ASSIGN(CLASSNAME); \
 };
-
-/**
- @class EaseBounce
- @brief EaseBounce type alias.
- @since v0.8.2
- @ingroup Actions
- */
-typedef ActionEase EaseBounce;
 
 /**
  @class EaseExponentialIn
@@ -200,6 +192,14 @@ EASE_TEMPLATE_DECL_CLASS(EaseSineOut);
  @ingroup Actions
  */
 EASE_TEMPLATE_DECL_CLASS(EaseSineInOut);
+
+/**
+ @class EaseBounce
+ @brief EaseBounce abstract class.
+ @since v0.8.2
+ @ingroup Actions
+ */
+class CC_DLL EaseBounce : public ActionEase {};
 
 /**
  @class EaseBounceIn
@@ -429,12 +429,12 @@ public:
      @brief Get period of the wave in radians. Default value is 0.3.
      @return Return the period of the wave in radians.
     */
-    inline float getPeriod() const { return _period; }
+    float getPeriod() const { return _period; }
     /**
      @brief Set period of the wave in radians.
      @param fPeriod The value will be set.
     */
-    inline void setPeriod(float fPeriod) { _period = fPeriod; }
+    void setPeriod(float fPeriod) { _period = fPeriod; }
 
 CC_CONSTRUCTOR_ACCESS:
     EaseElastic() {}
