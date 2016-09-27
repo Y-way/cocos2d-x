@@ -1271,8 +1271,12 @@ void JSScheduleWrapper::scheduleFunc(float dt)
         {
             JS::HandleValueArray args = JS::HandleValueArray::fromMarkedLocation(1, &data);
             JS::RootedValue retval(cx);
-            JS::RootedObject target(cx, getJSCallbackThis().toObjectOrNull());
-            JS_CallFunctionValue(cx, target, callback, args, &retval);
+            JS::RootedValue targetVal(cx, getJSCallbackThis());
+            if (!targetVal.isNullOrUndefined())
+            {
+                JS::RootedObject target(cx, targetVal.toObjectOrNull());
+                JS_CallFunctionValue(cx, target, callback, args, &retval);
+            }
         }
     }
 }
@@ -4715,7 +4719,7 @@ void __JSPlistDelegator::endElement(void *ctx, const char *name) {
     }
 }
 
-void __JSPlistDelegator::textHandler(void *ctx, const char *ch, int len) {
+void __JSPlistDelegator::textHandler(void *ctx, const char *ch, size_t len) {
     CC_UNUSED_PARAM(ctx);
     std::string text((char*)ch, 0, len);
 
