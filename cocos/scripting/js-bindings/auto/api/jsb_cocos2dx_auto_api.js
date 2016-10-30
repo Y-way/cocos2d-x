@@ -848,6 +848,16 @@ func
 },
 
 /**
+ * @method setActionManager
+ * @param {cc.ActionManager} arg0
+ */
+setActionManager : function (
+actionmanager 
+)
+{
+},
+
+/**
  * @method isIgnoreAnchorPointForPosition
  * @return {bool}
  */
@@ -1248,6 +1258,16 @@ getOnEnterCallback : function (
 },
 
 /**
+ * @method setPositionNormalized
+ * @param {vec2_object} arg0
+ */
+setPositionNormalized : function (
+vec2 
+)
+{
+},
+
+/**
  * @method isOpacityModifyRGB
  * @return {bool}
  */
@@ -1644,13 +1664,13 @@ getScheduler : function(
 },
 
 /**
- * @method setActionManager
- * @param {cc.ActionManager} arg0
+ * @method getPositionNormalized
+ * @return {vec2_object}
  */
-setActionManager : function (
-actionmanager 
+getPositionNormalized : function (
 )
 {
+    return cc.Vec2;
 },
 
 /**
@@ -2210,14 +2230,16 @@ setCameraOrderDirty : function (
 
 /**
  * @method render
- * @param {cc.Renderer} arg0
- * @param {mat4_object} arg1
- * @param {mat4_object} arg2
- */
-render : function (
-renderer, 
-mat4, 
-mat4 
+* @param {cc.Renderer|cc.Renderer} renderer
+* @param {mat4_object|mat4_object} mat4
+* @param {mat4_object|mat4_object} mat4
+* @param {unsigned int} int
+*/
+render : function(
+renderer,
+mat4,
+mat4,
+int 
 )
 {
 },
@@ -2668,11 +2690,41 @@ pause : function (
 },
 
 /**
+ * @method pushProjectionMatrix
+ * @param {unsigned int} arg0
+ */
+pushProjectionMatrix : function (
+int 
+)
+{
+},
+
+/**
+ * @method popProjectionMatrix
+ * @param {unsigned int} arg0
+ */
+popProjectionMatrix : function (
+int 
+)
+{
+},
+
+/**
  * @method setEventDispatcher
  * @param {cc.EventDispatcher} arg0
  */
 setEventDispatcher : function (
 eventdispatcher 
+)
+{
+},
+
+/**
+ * @method loadProjectionIdentityMatrix
+ * @param {unsigned int} arg0
+ */
+loadProjectionIdentityMatrix : function (
+int 
 )
 {
 },
@@ -2915,6 +2967,18 @@ init : function (
  */
 setScheduler : function (
 scheduler 
+)
+{
+},
+
+/**
+ * @method multiplyProjectionMatrix
+ * @param {mat4_object} arg0
+ * @param {unsigned int} arg1
+ */
+multiplyProjectionMatrix : function (
+mat4, 
+int 
 )
 {
 },
@@ -3187,6 +3251,28 @@ getVisibleSize : function (
 )
 {
     return cc.Size;
+},
+
+/**
+ * @method loadProjectionMatrix
+ * @param {mat4_object} arg0
+ * @param {unsigned int} arg1
+ */
+loadProjectionMatrix : function (
+mat4, 
+int 
+)
+{
+},
+
+/**
+ * @method initProjectionMatrixStack
+ * @param {unsigned int} arg0
+ */
+initProjectionMatrixStack : function (
+int 
+)
+{
 },
 
 /**
@@ -4375,6 +4461,16 @@ vec2
 },
 
 /**
+ * @method getCapInsets
+ * @return {rect_object}
+ */
+getCapInsets : function (
+)
+{
+    return cc.Rect;
+},
+
+/**
  * @method getOriginalSizeInPixels
  * @return {size_object}
  */
@@ -4515,6 +4611,16 @@ isRotated : function (
 },
 
 /**
+ * @method hasCenterRect
+ * @return {bool}
+ */
+hasCenterRect : function (
+)
+{
+    return false;
+},
+
+/**
  * @method setRotated
  * @param {bool} arg0
  */
@@ -4552,6 +4658,16 @@ getAnchorPoint : function (
 )
 {
     return cc.Vec2;
+},
+
+/**
+ * @method setCapInsets
+ * @param {rect_object} arg0
+ */
+setCapInsets : function (
+rect 
+)
+{
 },
 
 /**
@@ -17152,6 +17268,16 @@ float
 },
 
 /**
+ * @method getCapInsets
+ * @return {rect_object}
+ */
+getCapInsets : function (
+)
+{
+    return cc.Rect;
+},
+
+/**
  * @method getResourceType
  * @return {int}
  */
@@ -17208,6 +17334,16 @@ bool
 },
 
 /**
+ * @method isFlippedX
+ * @return {bool}
+ */
+isFlippedX : function (
+)
+{
+    return false;
+},
+
+/**
  * @method setTextureRect
 * @param {rect_object|rect_object} rect
 * @param {bool} bool
@@ -17234,6 +17370,16 @@ str
 },
 
 /**
+ * @method isFlippedY
+ * @return {bool}
+ */
+isFlippedY : function (
+)
+{
+    return false;
+},
+
+/**
  * @method isFrameDisplayed
  * @param {cc.SpriteFrame} arg0
  * @return {bool}
@@ -17253,6 +17399,16 @@ getAtlasIndex : function (
 )
 {
     return 0;
+},
+
+/**
+ * @method getCapInsetsNormalized
+ * @return {rect_object}
+ */
+getCapInsetsNormalized : function (
+)
+{
+    return cc.Rect;
 },
 
 /**
@@ -17414,23 +17570,23 @@ spriteframe
 },
 
 /**
- * @method isFlippedX
- * @return {bool}
+ * @method setCapInsets
+ * @param {rect_object} arg0
  */
-isFlippedX : function (
+setCapInsets : function (
+rect 
 )
 {
-    return false;
 },
 
 /**
- * @method isFlippedY
- * @return {bool}
+ * @method setCapInsetsNormalized
+ * @param {rect_object} arg0
  */
-isFlippedY : function (
+setCapInsetsNormalized : function (
+rect 
 )
 {
-    return false;
 },
 
 /**
@@ -20544,14 +20700,16 @@ str
 
 /**
  * @method initWithByteArrays
-* @param {char|char} char
-* @param {char|char} char
+* @param {char|char|char} char
+* @param {char|char|char} char
+* @param {String|String} str
 * @param {String} str
-* @return {bool|bool}
+* @return {bool|bool|bool}
 */
 initWithByteArrays : function(
 char,
 char,
+str,
 str 
 )
 {
@@ -20572,12 +20730,14 @@ float
 
 /**
  * @method initWithFilenames
-* @param {String|String} str
+* @param {String|String|String} str
+* @param {String|String|String} str
 * @param {String|String} str
 * @param {String} str
-* @return {bool|bool}
+* @return {bool|bool|bool}
 */
 initWithFilenames : function(
+str,
 str,
 str,
 str 
@@ -20768,14 +20928,16 @@ int
 
 /**
  * @method createWithByteArrays
-* @param {char|char} char
-* @param {char|char} char
+* @param {char|char|char} char
+* @param {char|char|char} char
+* @param {String|String} str
 * @param {String} str
-* @return {cc.GLProgram|cc.GLProgram}
+* @return {cc.GLProgram|cc.GLProgram|cc.GLProgram}
 */
 createWithByteArrays : function(
 char,
 char,
+str,
 str 
 )
 {
@@ -20784,12 +20946,14 @@ str
 
 /**
  * @method createWithFilenames
-* @param {String|String} str
+* @param {String|String|String} str
+* @param {String|String|String} str
 * @param {String|String} str
 * @param {String} str
-* @return {cc.GLProgram|cc.GLProgram}
+* @return {cc.GLProgram|cc.GLProgram|cc.GLProgram}
 */
 createWithFilenames : function(
+str,
 str,
 str,
 str 
