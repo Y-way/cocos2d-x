@@ -400,7 +400,7 @@ JS_BINDED_CONSTRUCTOR_IMPL(MinXmlHttpRequest)
     js_proxy_t *p = jsb_new_proxy(req, obj);
 
 #if CC_ENABLE_GC_FOR_NATIVE_OBJECTS
-    js_add_FinalizeHook(cx, obj);
+    js_add_FinalizeHook(cx, obj, true);
     // don't retain it, already retained
 #if COCOS2D_DEBUG > 1
     CCLOG("++++++RETAINED++++++ Cpp(XMLHttpRequest): %p - JS: %p", req, obj.get());
@@ -834,6 +834,8 @@ JS_BINDED_FUNC_IMPL(MinXmlHttpRequest, send)
             {
                 return false;
             }
+        }
+        else if(args.get(0).isNullOrUndefined()){
         }
         else
         {
