@@ -707,8 +707,11 @@ void HttpClient::processResponse(HttpResponse* response, char* responseMessage)
     free(contentInfo);
     
     char *messageInfo = urlConnection.getResponseMessage();
-    strcpy(responseMessage, messageInfo);
-    free(messageInfo);
+    if (messageInfo)
+    {
+        strcpy(responseMessage, messageInfo);
+        free(messageInfo);
+    }
 
     urlConnection.disconnect();
 
@@ -890,7 +893,7 @@ HttpClient::~HttpClient()
 }
 
 //Lazy create semaphore & mutex & thread
-bool HttpClient::lazyInitThreadSemphore()
+bool HttpClient::lazyInitThreadSemaphore()
 {
     if (_isInited)
     {
@@ -909,7 +912,7 @@ bool HttpClient::lazyInitThreadSemphore()
 //Add a get task to queue
 void HttpClient::send(HttpRequest* request)
 {    
-    if (!lazyInitThreadSemphore()) 
+    if (!lazyInitThreadSemaphore()) 
     {
         return;
     }

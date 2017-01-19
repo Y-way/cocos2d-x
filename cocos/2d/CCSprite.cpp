@@ -669,7 +669,10 @@ void Sprite::updatePoly()
 
 void Sprite::setCenterRectNormalized(const cocos2d::Rect &rectTopLeft)
 {
-    CCASSERT(_renderMode == RenderMode::QUAD || _renderMode == RenderMode::SLICE9, "centerRect can only be used with SLICE9 or QUAD render modes");
+    if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9) {
+        CCLOGWARN("Warning: Sprite::setCenterRectNormalized() only works with QUAD and SLICE9 render modes");
+        return;
+    }
 
     // FIMXE: Rect is has origin on top-left (like text coordinate).
     // but all the logic has been done using bottom-left as origin. So it is easier to invert Y
@@ -716,7 +719,10 @@ void Sprite::setCenterRectNormalized(const cocos2d::Rect &rectTopLeft)
 
 void Sprite::setCenterRect(const cocos2d::Rect &rectInPoints)
 {
-    CCASSERT(_renderMode == RenderMode::QUAD || _renderMode == RenderMode::SLICE9, "centerRect can only be used with SLICE9 or QUAD render modes");
+    if (_renderMode != RenderMode::QUAD && _renderMode != RenderMode::SLICE9) {
+        CCLOGWARN("Warning: Sprite::setCenterRect() only works with QUAD and SLICE9 render modes");
+        return;
+    }
 
     if (!_originalContentSize.equals(Size::ZERO))
     {
@@ -855,7 +861,7 @@ void Sprite::setVertexCoords(const Rect& rect, V3F_C4B_T2F_Quad* outQuad)
     _offsetPosition.x = relativeOffsetX + (_originalContentSize.width - _rect.size.width) / 2;
     _offsetPosition.y = relativeOffsetY + (_originalContentSize.height - _rect.size.height) / 2;
 
-    // FIXME: Streching should be applied to the "offset" as well
+    // FIXME: Stretching should be applied to the "offset" as well
     // but probably it should be calculated in the caller function. It will be tidier
     if (_renderMode == RenderMode::QUAD) {
         _offsetPosition.x *= _strechFactor.x;
@@ -1341,7 +1347,7 @@ void Sprite::setVisible(bool bVisible)
 void Sprite::setContentSize(const Size& size)
 {
     if (_renderMode == RenderMode::QUAD_BATCHNODE || _renderMode == RenderMode::POLYGON)
-        CCLOGWARN("Sprite::setContentSize() doesn't strech the sprite when using QUAD_BATCHNODE or POLYGON render modes");
+        CCLOGWARN("Sprite::setContentSize() doesn't stretch the sprite when using QUAD_BATCHNODE or POLYGON render modes");
 
     Node::setContentSize(size);
 

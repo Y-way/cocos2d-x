@@ -436,7 +436,7 @@ void Terrain::calculateNormal()
             _indices.push_back (nLocIndex + _imageWidth+1);
         }
     }
-    for (unsigned int i = 0, size = _indices.size(); i < size; i += 3) {
+    for (size_t i = 0, size = _indices.size(); i < size; i += 3) {
         unsigned int Index0 = _indices[i];
         unsigned int Index1 = _indices[i + 1];
         unsigned int Index2 = _indices[i + 2];
@@ -450,8 +450,8 @@ void Terrain::calculateNormal()
         _vertices[Index2]._normal += Normal;
     }
 
-    for (unsigned int i = 0, size = _vertices.size(); i < size; ++i) {
-        _vertices[i]._normal.normalize();
+    for (auto &vertex : _vertices) {
+        vertex._normal.normalize();
     }
     //global indices no need at all
     _indices.clear();
@@ -572,7 +572,7 @@ bool Terrain::getIntersectionPoint(const Ray & ray_, Vec3 & intersectionPoint) c
                 {
                     if (closeList.find(chunk) == closeList.end())
                     {
-                        if (chunk->getInsterctPointWithRay(ray, tmpIntersectionPoint))
+                        if (chunk->getIntersectPointWithRay(ray, tmpIntersectionPoint))
                         {
                             float dist = (ray._origin - tmpIntersectionPoint).length();
                             if (intersectionDist > dist)
@@ -1324,7 +1324,7 @@ void Terrain::Chunk::calculateSlope()
     _slope = (highest.y - lowest.y)/dist;
 }
 
-bool Terrain::Chunk::getInsterctPointWithRay(const Ray& ray, Vec3 &interscetPoint)
+bool Terrain::Chunk::getIntersectPointWithRay(const Ray& ray, Vec3& intersectPoint)
 {
     if (!ray.intersects(_aabb))
         return false;
@@ -1334,12 +1334,12 @@ bool Terrain::Chunk::getInsterctPointWithRay(const Ray& ray, Vec3 &interscetPoin
     for (auto triangle : _trianglesList)
     {
         Vec3 p;
-        if (triangle.getInsterctPoint(ray, p))
+        if (triangle.getIntersectPoint(ray, p))
         {
             float dist = ray._origin.distance(p);
             if (dist<minDist)
             {
-            interscetPoint = p;
+            intersectPoint = p;
             minDist = dist;
             }
             isFind =true;
@@ -1347,6 +1347,11 @@ bool Terrain::Chunk::getInsterctPointWithRay(const Ray& ray, Vec3 &interscetPoin
     }
 
     return isFind;
+}
+
+bool Terrain::Chunk::getInsterctPointWithRay(const Ray& ray, Vec3& intersectPoint)
+{
+    return getIntersectPointWithRay(ray, intersectPoint);
 }
 
 void Terrain::Chunk::updateVerticesForLOD()
@@ -1652,7 +1657,7 @@ void Terrain::Triangle::transform(const cocos2d::Mat4& matrix)
 }
 
 //Please refer to 3D Math Primer for Graphics and Game Development
-bool Terrain::Triangle::getInsterctPoint(const Ray &ray, Vec3& interScetPoint)const
+bool Terrain::Triangle::getIntersectPoint(const Ray& ray, Vec3& intersectPoint) const
 {
     // E1
     Vec3 E1 = _p2 - _p1;
@@ -1707,8 +1712,13 @@ bool Terrain::Triangle::getInsterctPoint(const Ray &ray, Vec3& interScetPoint)co
     u *= fInvDet;
     v *= fInvDet;
 
-    interScetPoint = ray._origin + ray._direction * t;
+    intersectPoint = ray._origin + ray._direction * t;
     return true;
+}
+
+bool Terrain::Triangle::getInsterctPoint(const Ray& ray, Vec3& intersectPoint) const
+{
+    return getIntersectPoint(ray, intersectPoint);
 }
 
 NS_CC_END
