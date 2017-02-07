@@ -102,7 +102,7 @@ private:
     std::vector<std::string> _typesMessage;
 };
 
-SocketIOPacket::SocketIOPacket() :_separator(":"), _endpointseparator("")
+SocketIOPacket::SocketIOPacket() :_endpointseparator(""), _separator(":")
 {
     _types.push_back("disconnect");
     _types.push_back("connect");
@@ -393,8 +393,8 @@ public:
 SIOClientImpl::SIOClientImpl(const std::string& host, int port) :
     _port(port),
     _host(host),
-    _connected(false),
     _uri(host + ":" + StringUtils::toString(port)),
+    _connected(false),
     _ws(nullptr)
 {
 }
@@ -463,9 +463,9 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *resp
     std::stringstream s;
     s.str("");
 
-    for (unsigned int i = 0, size = buffer->size(); i < size; ++i)
+    for (const auto& iter : *buffer)
     {
-        s << (*buffer)[i];
+        s << iter;
     }
 
     CCLOGINFO("SIOClientImpl::handshake() dump data: %s", s.str().c_str());
