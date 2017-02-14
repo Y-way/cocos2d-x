@@ -493,7 +493,6 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *resp
         temp = temp.erase(0, b + 1);
 
         // chomp past the upgrades
-        a = temp.find(":");
         b = temp.find(",");
 
         temp = temp.erase(0, b + 1);
@@ -1165,10 +1164,8 @@ SIOClient* SocketIO::connect(const std::string& uri, SocketIO::SIODelegate& dele
     std::stringstream s;
     s << host << ":" << port;
 
-    SIOClientImpl* socket = nullptr;
+    SIOClientImpl *socket = SocketIO::getInstance()->getSocket(s.str());
     SIOClient *c = nullptr;
-
-    socket = SocketIO::getInstance()->getSocket(s.str());
 
     if(socket == nullptr)
     {
@@ -1200,11 +1197,8 @@ SIOClient* SocketIO::connect(const std::string& uri, SocketIO::SIODelegate& dele
             c->disconnect();
 
             CCLOG("SocketIO: recreate a new socket, new client, connect");
-            SIOClientImpl* newSocket = nullptr;
-            SIOClient *newC = nullptr;
-
-            newSocket = SIOClientImpl::create(host, port);
-            newC = new (std::nothrow) SIOClient(host, port, path, newSocket, delegate);
+            SIOClientImpl* newSocket = SIOClientImpl::create(host, port);
+            SIOClient *newC = new (std::nothrow) SIOClient(host, port, path, newSocket, delegate);
 
             newSocket->addClient(path, newC);
             newSocket->connect();
