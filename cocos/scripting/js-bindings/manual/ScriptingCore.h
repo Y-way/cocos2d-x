@@ -1,7 +1,7 @@
 /*
  * Created by Rolando Abarca on 3/14/12.
  * Copyright (c) 2012 Zynga Inc. All rights reserved.
- * Copyright (c) 2013-2016 Chukong Technologies Inc.
+ * Copyright (c) 2013-2017 Chukong Technologies Inc.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -511,7 +511,7 @@ public:
     JSObject* getGlobalObject() { return _global->get(); }
     
     /**@~english
-     * Checks whether a C++ function is overrided in js prototype chain
+     * Checks whether a C++ function is overridden in js prototype chain
      * @param obj @~english The js object
      * @param name @~english The function name
      * @param native @~english The native function

@@ -1,6 +1,6 @@
 /****************************************************************************
 Copyright (c) 2010-2013 cocos2d-x.org
-Copyright (c) 2013-2016 Chukong Technologies Inc.
+Copyright (c) 2013-2017 Chukong Technologies Inc.
 
 http://www.cocos2d-x.org
 
@@ -918,9 +918,9 @@ protected:
 #else
         // As cocos2d-x uses c++11, we will use std::bind to leverage move sematics to
         // move our arguments into our lambda, to potentially avoid copying. 
-        auto lambda = std::bind([](const T& action, const R& callback, const ARGS& ...args)
+        auto lambda = std::bind([](const T& actionIn, const R& callbackIn, const ARGS& ...argsIn)
         {
-            Director::getInstance()->getScheduler()->performFunctionInCocosThread(std::bind(callback, action(args...)));
+            Director::getInstance()->getScheduler()->performFunctionInCocosThread(std::bind(callbackIn, actionIn(argsIn...)));
         }, std::forward<T>(action), std::forward<R>(callback), std::forward<ARGS>(args)...);
         
 #endif

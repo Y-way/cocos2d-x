@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2010-2012 cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
+ Copyright (c) 2013-2017 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -42,7 +42,7 @@
 
 struct lws;
 struct lws_protocols;
-
+struct lws_vhost;
 /**
  * @addtogroup network
  * @{
@@ -55,7 +55,6 @@ class EventListenerCustom;
 namespace network {
 
 class WsThreadHelper;
-struct WsCache;
 
 /**
  * WebSocket is wrapper of the libwebsockets-protocol, let the develop could call the websocket easily.
@@ -213,6 +212,16 @@ public:
      */
     State getReadyState();
 
+    /**
+     *  @brief Gets the URL of websocket connection.
+     */
+    inline const std::string& getUrl() const { return _url; }
+
+    /**
+     *  @brief Gets the protocol selected by websocket server.
+     */
+    inline const std::string& getProtocol() const { return _selectedProtocol; }
+
 private:
 
     // The following callback functions are invoked in websocket thread
@@ -225,26 +234,24 @@ private:
     int onConnectionError();
     int onConnectionClosed();
 
-    struct WsCache* getOrCreateVhost(struct lws_protocols* protocols);
+    struct lws_vhost* createVhost(struct lws_protocols* protocols, int& sslConnection);
 
 private:
 
     std::mutex   _readyStateMutex;
     State        _readyState;
 
-    std::string  _host;
-    unsigned int _port;
-    std::string  _path;
+    std::string _url;
 
     std::vector<char> _receivedData;
 
     struct lws* _wsInstance;
-    struct lws_protocols* _protocols;
-    std::string _protocolNames;
+    struct lws_protocols* _lwsProtocols;
+    std::string _clientSupportedProtocols;
+    std::string _selectedProtocol;
 
     std::shared_ptr<std::atomic<bool>> _isDestroyed;
     Delegate* _delegate;
-    int _SSLConnection;
 
     std::mutex _closeMutex;
     std::condition_variable _closeCondition;

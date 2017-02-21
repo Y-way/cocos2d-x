@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2015 Chris Hannon http://www.channon.us
- Copyright (c) 2013-2016 Chukong Technologies Inc.
+ Copyright (c) 2013-2017 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -102,7 +102,7 @@ private:
     std::vector<std::string> _typesMessage;
 };
 
-SocketIOPacket::SocketIOPacket() :_separator(":"), _endpointseparator("")
+SocketIOPacket::SocketIOPacket() :_endpointseparator(""), _separator(":")
 {
     _types.push_back("disconnect");
     _types.push_back("connect");
@@ -393,8 +393,8 @@ public:
 SIOClientImpl::SIOClientImpl(const std::string& host, int port) :
     _port(port),
     _host(host),
-    _connected(false),
     _uri(host + ":" + StringUtils::toString(port)),
+    _connected(false),
     _ws(nullptr)
 {
 }
@@ -463,9 +463,9 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *resp
     std::stringstream s;
     s.str("");
 
-    for (unsigned int i = 0, size = buffer->size(); i < size; ++i)
+    for (const auto& iter : *buffer)
     {
-        s << (*buffer)[i];
+        s << iter;
     }
 
     CCLOGINFO("SIOClientImpl::handshake() dump data: %s", s.str().c_str());
@@ -493,7 +493,6 @@ void SIOClientImpl::handshakeResponse(HttpClient* /*sender*/, HttpResponse *resp
         temp = temp.erase(0, b + 1);
 
         // chomp past the upgrades
-        a = temp.find(":");
         b = temp.find(",");
 
         temp = temp.erase(0, b + 1);
@@ -1165,10 +1164,8 @@ SIOClient* SocketIO::connect(const std::string& uri, SocketIO::SIODelegate& dele
     std::stringstream s;
     s << host << ":" << port;
 
-    SIOClientImpl* socket = nullptr;
+    SIOClientImpl *socket = SocketIO::getInstance()->getSocket(s.str());
     SIOClient *c = nullptr;
-
-    socket = SocketIO::getInstance()->getSocket(s.str());
 
     if(socket == nullptr)
     {
@@ -1200,11 +1197,8 @@ SIOClient* SocketIO::connect(const std::string& uri, SocketIO::SIODelegate& dele
             c->disconnect();
 
             CCLOG("SocketIO: recreate a new socket, new client, connect");
-            SIOClientImpl* newSocket = nullptr;
-            SIOClient *newC = nullptr;
-
-            newSocket = SIOClientImpl::create(host, port);
-            newC = new (std::nothrow) SIOClient(host, port, path, newSocket, delegate);
+            SIOClientImpl* newSocket = SIOClientImpl::create(host, port);
+            SIOClient *newC = new (std::nothrow) SIOClient(host, port, path, newSocket, delegate);
 
             newSocket->addClient(path, newC);
             newSocket->connect();

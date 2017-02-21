@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2012 cocos2d-x.org
- Copyright (c) 2013-2016 Chukong Technologies Inc.
+ Copyright (c) 2013-2017 Chukong Technologies Inc.
 
  http://www.cocos2d-x.org
 
@@ -2308,7 +2308,7 @@ void ActionFloatTest::onEnter()
 
     auto s = Director::getInstance()->getWinSize();
 
-    // create float action with duration and from to value, using lambda function we can easly animate any property of the Node.
+    // create float action with duration and from to value, using lambda function we can easily animate any property of the Node.
     auto actionFloat = ActionFloat::create(2.f, 0, 3, [this](float value) {
         _tamara->setScale(value);
     });

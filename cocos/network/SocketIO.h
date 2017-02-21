@@ -1,6 +1,6 @@
 /****************************************************************************
  Copyright (c) 2015 Chris Hannon http://www.channon.us
- Copyright (c) 2013-2016 Chukong Technologies Inc.
+ Copyright (c) 2013-2017 Chukong Technologies Inc.
 
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -121,7 +121,7 @@ public:
          */
         virtual void onMessage(SIOClient* client, const std::string& data) { CCLOG("SIODelegate onMessage fired with data: %s", data.c_str()); };
         /**
-         * Pure virtual callback function, this function should be overrided by the subclass.
+         * Pure virtual callback function, this function should be overridden by the subclass.
          *
          * This function would be called when the related SIOClient object disconnect or receive disconnect signal.
          *
@@ -129,7 +129,7 @@ public:
          */
         virtual void onClose(SIOClient* client) = 0;
         /**
-         * Pure virtual callback function, this function should be overrided by the subclass.
+         * Pure virtual callback function, this function should be overridden by the subclass.
          *
          * This function would be called when the related SIOClient object receive error signal or didn't connect the endpoint but do some network operation, eg.,send and emit,etc.
          *
