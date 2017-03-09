@@ -28,6 +28,7 @@
  ****************************************************************************/
 
 #include "network/WebSocket.h"
+#include "network/Uri.h"
 #include "base/CCDirector.h"
 #include "base/CCScheduler.h"
 #include "base/CCEventDispatcher.h"
@@ -581,11 +582,8 @@ bool WebSocket::init(const Delegate& delegate,
     _url = url;
     _caFilePath = caFilePath;
 
-    // make sure url start with 'ws://' or 'wss://'
-    if (_url.size() < 6)
+    if (_url.empty())
         return false;
-
-    CCASSERT(0 == strncmp(_url.c_str(), "ws://", 5) || 0 == strncmp(_url.c_str(), "wss://", 6), "Invalid URL");
 
     if (protocols != nullptr && !protocols->empty())
     {
@@ -616,17 +614,25 @@ bool WebSocket::init(const Delegate& delegate,
         }
     }
 
-    // WebSocket thread needs to be invoked at the end of this method.
+    bool isWebSocketThreadCreated = true;
     if (__wsHelper == nullptr)
     {
         __wsHelper = new (std::nothrow) WsThreadHelper();
-        __wsHelper->createWebSocketThread();
+        isWebSocketThreadCreated = false;
     }
 
     WsMessage* msg = new (std::nothrow) WsMessage();
     msg->what = WS_MSG_TO_SUBTHREAD_CREATE_CONNECTION;
     msg->user = this;
     __wsHelper->sendMessageToWebSocketThread(msg);
+
+    // fixed https://github.com/cocos2d/cocos2d-x/issues/17433
+    // createWebSocketThread has to be after message WS_MSG_TO_SUBTHREAD_CREATE_CONNECTION was sent.
+    // And websocket thread should only be created once.
+    if (!isWebSocketThreadCreated)
+    {
+        __wsHelper->createWebSocketThread();
+    }
 
     return true;
 }
@@ -861,24 +867,11 @@ void WebSocket::onClientOpenConnectionRequest()
         _readyState = State::CONNECTING;
         _readyStateMutex.unlock();
 
-        const char* prot = nullptr;
-        const char* address = nullptr;
-        const char* path = nullptr;
-        int port = -1;
-
-        // lws_parse_uri will modify its first parameter, but _url is the member variable that we don't want it to be changed.
-        // Therefore, use a temporary url variable here.
-        std::string tmpUrl = _url;
-        if (lws_parse_uri((char*)tmpUrl.c_str(), &prot, &address, &port, &path))
-        {
-            LOGE("lws_parse_uri failed: %s", _url.c_str());
-            return;
-        }
-
-        LOGD("protocol: %s, host: %s, port: %d, path: %s\n", prot, address, port, path);
+        Uri uri = Uri::parse(_url);
+        LOGD("scheme: %s, host: %s, port: %d, path: %s\n", uri.getScheme().c_str(), uri.getHost().c_str(), static_cast<int>(uri.getPort()), uri.getPath().c_str());
 
         int sslConnection = 0;
-        if (0 == strcmp(prot, "wss"))
+        if (uri.isSecure())
             sslConnection = LCCSCF_USE_SSL;
 
         struct lws_vhost* vhost = nullptr;
@@ -894,12 +887,12 @@ void WebSocket::onClientOpenConnectionRequest()
         struct lws_client_connect_info connectInfo;
         memset(&connectInfo, 0, sizeof(connectInfo));
         connectInfo.context = __wsContext;
-        connectInfo.address = address;
-        connectInfo.port = port;
+        connectInfo.address = uri.getHost().c_str();
+        connectInfo.port = uri.getPort();
         connectInfo.ssl_connection = sslConnection;
-        connectInfo.path = path;
-        connectInfo.host = address;
-        connectInfo.origin = address;
+        connectInfo.path = uri.getPath().c_str();
+        connectInfo.host = uri.getHost().c_str();
+        connectInfo.origin = uri.getHost().c_str();
         connectInfo.protocol = _clientSupportedProtocols.empty() ? nullptr : _clientSupportedProtocols.c_str();
         connectInfo.ietf_version_or_minus_one = -1;
         connectInfo.userdata = this;
