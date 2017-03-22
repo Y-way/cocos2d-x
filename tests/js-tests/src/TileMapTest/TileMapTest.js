@@ -1493,7 +1493,7 @@ var TMXBug987 = TileDemo.extend({
             node = childs[i];
             if (!node) break;
             if ("opengl" in cc.sys.capabilities)
-                node.texture.setAntiAliasTexParameters();
+                node.texture.setAliasTexParameters();
         }
 
         map.anchorX = 0;
@@ -1577,7 +1577,7 @@ var TMXGIDObjectsTest = TileDemo.extend({
         this.addChild(map, 0, TAG_TILE_MAP);
 
         this.log("ContentSize:" + map.width + "," + map.height);
-        this.log("---. Iterating over all the group objets");
+        this.log("---. Iterating over all the group objects");
 
         var group = map.getObjectGroup("Object Layer 1");
         var array = group.getObjects();

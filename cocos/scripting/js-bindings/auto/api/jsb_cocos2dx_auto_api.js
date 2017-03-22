@@ -7125,6 +7125,16 @@ func
 },
 
 /**
+ * @method getDefaultResourceRootPath
+ * @return {String}
+ */
+getDefaultResourceRootPath : function (
+)
+{
+    return ;
+},
+
+/**
  * @method loadFilenameLookupDictionaryFromFile
  * @param {String} arg0
  */
@@ -7181,6 +7191,16 @@ str
 },
 
 /**
+ * @method getOriginalSearchPaths
+ * @return {Array}
+ */
+getOriginalSearchPaths : function (
+)
+{
+    return new Array();
+},
+
+/**
  * @method getNewFilename
  * @param {String} arg0
  * @return {String}
@@ -7190,6 +7210,18 @@ str
 )
 {
     return ;
+},
+
+/**
+ * @method listFiles
+ * @param {String} arg0
+ * @return {Array}
+ */
+listFiles : function (
+str 
+)
+{
+    return new Array();
 },
 
 /**
@@ -7454,6 +7486,18 @@ getSearchResolutionsOrder : function (
 createDirectory : function(
 str,
 func 
+)
+{
+},
+
+/**
+ * @method listFilesRecursively
+ * @param {String} arg0
+ * @param {Array} arg1
+ */
+listFilesRecursively : function (
+str, 
+array 
 )
 {
 },
@@ -7864,7 +7908,7 @@ cc.EventMouse = {
 
 /**
  * @method getMouseButton
- * @return {int}
+ * @return {cc.EventMouse::MouseButton}
  */
 getMouseButton : function (
 )
@@ -7884,10 +7928,10 @@ getLocation : function (
 
 /**
  * @method setMouseButton
- * @param {int} arg0
+ * @param {cc.EventMouse::MouseButton} arg0
  */
 setMouseButton : function (
-int 
+mousebutton 
 )
 {
 },
