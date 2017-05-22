@@ -1,18 +1,18 @@
 /****************************************************************************
- Copyright (c) 2013-2017 Chukong Technologies Inc.
- 
+ Copyright (c) 2017 Chukong Technologies Inc.
+
  http://www.cocos2d-x.org
- 
+
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
  in the Software without restriction, including without limitation the rights
  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  copies of the Software, and to permit persons to whom the Software is
  furnished to do so, subject to the following conditions:
- 
+
  The above copyright notice and this permission notice shall be included in
  all copies or substantial portions of the Software.
- 
+
  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,34 +22,37 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#include "base/CCEventListener.h"
-#include "base/CCConsole.h"
+const char* ccShader_LayerRadialGradient_frag = R"(
 
-NS_CC_BEGIN
+uniform vec4 u_startColor;
+uniform vec4 u_endColor;
+uniform vec2 u_center;
+uniform float u_radius;
+uniform float u_expand;
 
-EventListener::EventListener()
-{}
-    
-EventListener::~EventListener() 
+#ifdef GL_ES
+varying lowp vec4 v_position;
+#else
+varying vec4 v_position;
+#endif
+
+void main()
 {
-	CCLOGINFO("In the destructor of EventListener. %p", this);
+    float d = distance(v_position.xy, u_center) / u_radius;
+    if (d <= 1.0)
+    {
+        if (d <= u_expand)
+        {
+            gl_FragColor = u_startColor;
+        }
+        else
+        {
+            gl_FragColor = mix(u_startColor, u_endColor, (d - u_expand) / (1.0 - u_expand));
+        }
+    }
+    else
+    {
+        gl_FragColor = vec4(0.0, 0.0, 0.0, 0.0);
+    }
 }
-
-bool EventListener::init(Type t, const ListenerID& listenerID, const std::function<void(Event*)>& callback)
-{
-    _onEvent = callback;
-    _type = t;
-    _listenerID = listenerID;
-    _isRegistered = false;
-    _paused = false;
-    _isEnabled = true;
-    
-    return true;
-}
-
-bool EventListener::checkAvailable()
-{ 
-	return (_onEvent != nullptr);
-}
-
-NS_CC_END
+)";
