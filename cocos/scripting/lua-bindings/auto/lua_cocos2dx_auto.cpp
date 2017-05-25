@@ -12412,7 +12412,7 @@ int lua_cocos2dx_GLView_getFrameSize(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_GLView_getFrameSize'", nullptr);
             return 0;
         }
-        const cocos2d::Size& ret = cobj->getFrameSize();
+        cocos2d::Size ret = cobj->getFrameSize();
         size_to_luaval(tolua_S, ret);
         return 1;
     }
@@ -14546,39 +14546,43 @@ int lua_cocos2dx_Director_mainLoop(lua_State* tolua_S)
     int argc = 0;
     cocos2d::Director* cobj = nullptr;
     bool ok  = true;
-
 #if COCOS2D_DEBUG >= 1
     tolua_Error tolua_err;
 #endif
 
-
 #if COCOS2D_DEBUG >= 1
     if (!tolua_isusertype(tolua_S,1,"cc.Director",0,&tolua_err)) goto tolua_lerror;
 #endif
-
     cobj = (cocos2d::Director*)tolua_tousertype(tolua_S,1,0);
-
 #if COCOS2D_DEBUG >= 1
-    if (!cobj) 
+    if (!cobj)
     {
         tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Director_mainLoop'", nullptr);
         return 0;
     }
 #endif
-
     argc = lua_gettop(tolua_S)-1;
-    if (argc == 0) 
-    {
-        if(!ok)
-        {
-            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_Director_mainLoop'", nullptr);
-            return 0;
+    do{
+        if (argc == 1) {
+            double arg0;
+            ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.Director:mainLoop");
+
+            if (!ok) { break; }
+            cobj->mainLoop(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
         }
-        cobj->mainLoop();
-        lua_settop(tolua_S, 1);
-        return 1;
-    }
-    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.Director:mainLoop",argc, 0);
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 0) {
+            cobj->mainLoop();
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.Director:mainLoop",argc, 0);
     return 0;
 
 #if COCOS2D_DEBUG >= 1
@@ -17762,6 +17766,90 @@ int lua_register_cocos2dx_Scheduler(lua_State* tolua_S)
     return 1;
 }
 
+int lua_cocos2dx_AsyncTaskPool_enqueue(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::AsyncTaskPool* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.AsyncTaskPool",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::AsyncTaskPool*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_AsyncTaskPool_enqueue'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 2) {
+            cocos2d::AsyncTaskPool::TaskType arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.AsyncTaskPool:enqueue");
+
+            if (!ok) { break; }
+            std::function<void ()> arg1;
+            do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+
+            if (!ok) { break; }
+            cobj->enqueue(arg0, arg1);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 4) {
+            cocos2d::AsyncTaskPool::TaskType arg0;
+            ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.AsyncTaskPool:enqueue");
+
+            if (!ok) { break; }
+            std::function<void (void *)> arg1;
+            do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+
+            if (!ok) { break; }
+            void* arg2;
+            #pragma warning NO CONVERSION TO NATIVE FOR void*
+		ok = false;
+
+            if (!ok) { break; }
+            std::function<void ()> arg3;
+            do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+
+            if (!ok) { break; }
+            cobj->enqueue(arg0, arg1, arg2, arg3);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.AsyncTaskPool:enqueue",argc, 4);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_AsyncTaskPool_enqueue'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_AsyncTaskPool_stopTasks(lua_State* tolua_S)
 {
     int argc = 0;
@@ -17928,6 +18016,7 @@ int lua_register_cocos2dx_AsyncTaskPool(lua_State* tolua_S)
 
     tolua_beginmodule(tolua_S,"AsyncTaskPool");
         tolua_function(tolua_S,"new",lua_cocos2dx_AsyncTaskPool_constructor);
+        tolua_function(tolua_S,"enqueue",lua_cocos2dx_AsyncTaskPool_enqueue);
         tolua_function(tolua_S,"stopTasks",lua_cocos2dx_AsyncTaskPool_stopTasks);
         tolua_function(tolua_S,"destroyInstance", lua_cocos2dx_AsyncTaskPool_destroyInstance);
         tolua_function(tolua_S,"getInstance", lua_cocos2dx_AsyncTaskPool_getInstance);
@@ -32914,6 +33003,63 @@ int lua_cocos2dx_FileUtils_removeFile(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_FileUtils_listFilesRecursivelyAsync(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::FileUtils* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.FileUtils",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_FileUtils_listFilesRecursivelyAsync'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        std::string arg0;
+        std::function<void (std::vector<std::basic_string<char>, std::allocator<std::basic_string<char> > >)> arg1;
+
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.FileUtils:listFilesRecursivelyAsync");
+
+        do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_FileUtils_listFilesRecursivelyAsync'", nullptr);
+            return 0;
+        }
+        cobj->listFilesRecursivelyAsync(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.FileUtils:listFilesRecursivelyAsync",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_FileUtils_listFilesRecursivelyAsync'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_FileUtils_isAbsolutePath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -34786,6 +34932,63 @@ int lua_cocos2dx_FileUtils_createDirectory(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_FileUtils_listFilesAsync(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::FileUtils* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.FileUtils",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::FileUtils*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_FileUtils_listFilesAsync'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        std::string arg0;
+        std::function<void (std::vector<std::basic_string<char>, std::allocator<std::basic_string<char> > >)> arg1;
+
+        ok &= luaval_to_std_string(tolua_S, 2,&arg0, "cc.FileUtils:listFilesAsync");
+
+        do {
+			// Lambda binding for lua is not supported.
+			assert(false);
+		} while(0)
+		;
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_FileUtils_listFilesAsync'", nullptr);
+            return 0;
+        }
+        cobj->listFilesAsync(arg0, arg1);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.FileUtils:listFilesAsync",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_FileUtils_listFilesAsync'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_FileUtils_getWritablePath(lua_State* tolua_S)
 {
     int argc = 0;
@@ -34970,6 +35173,7 @@ int lua_register_cocos2dx_FileUtils(lua_State* tolua_S)
         tolua_function(tolua_S,"getStringFromFile",lua_cocos2dx_FileUtils_getStringFromFile);
         tolua_function(tolua_S,"setFilenameLookupDictionary",lua_cocos2dx_FileUtils_setFilenameLookupDictionary);
         tolua_function(tolua_S,"removeFile",lua_cocos2dx_FileUtils_removeFile);
+        tolua_function(tolua_S,"listFilesRecursivelyAsync",lua_cocos2dx_FileUtils_listFilesRecursivelyAsync);
         tolua_function(tolua_S,"isAbsolutePath",lua_cocos2dx_FileUtils_isAbsolutePath);
         tolua_function(tolua_S,"renameFile",lua_cocos2dx_FileUtils_renameFile);
         tolua_function(tolua_S,"getDefaultResourceRootPath",lua_cocos2dx_FileUtils_getDefaultResourceRootPath);
@@ -35003,6 +35207,7 @@ int lua_register_cocos2dx_FileUtils(lua_State* tolua_S)
         tolua_function(tolua_S,"setDefaultResourceRootPath",lua_cocos2dx_FileUtils_setDefaultResourceRootPath);
         tolua_function(tolua_S,"getSearchResolutionsOrder",lua_cocos2dx_FileUtils_getSearchResolutionsOrder);
         tolua_function(tolua_S,"createDirectory",lua_cocos2dx_FileUtils_createDirectory);
+        tolua_function(tolua_S,"listFilesAsync",lua_cocos2dx_FileUtils_listFilesAsync);
         tolua_function(tolua_S,"getWritablePath",lua_cocos2dx_FileUtils_getWritablePath);
         tolua_function(tolua_S,"listFilesRecursively",lua_cocos2dx_FileUtils_listFilesRecursively);
         tolua_function(tolua_S,"destroyInstance", lua_cocos2dx_FileUtils_destroyInstance);
@@ -59165,6 +59370,1082 @@ int lua_register_cocos2dx_LayerGradient(lua_State* tolua_S)
     std::string typeName = typeid(cocos2d::LayerGradient).name();
     g_luaType[typeName] = "cc.LayerGradient";
     g_typeCast["LayerGradient"] = "cc.LayerGradient";
+    return 1;
+}
+
+int lua_cocos2dx_LayerRadialGradient_getStartColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getStartColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getStartColor'", nullptr);
+            return 0;
+        }
+        cocos2d::Color4B ret = cobj->getStartColor();
+        color4b_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getStartColor",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getStartColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getBlendFunc(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getBlendFunc'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getBlendFunc'", nullptr);
+            return 0;
+        }
+        cocos2d::BlendFunc ret = cobj->getBlendFunc();
+        blendfunc_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getBlendFunc",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getBlendFunc'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getStartColor3B(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getStartColor3B'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getStartColor3B'", nullptr);
+            return 0;
+        }
+        cocos2d::Color3B ret = cobj->getStartColor3B();
+        color3b_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getStartColor3B",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getStartColor3B'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getStartOpacity(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getStartOpacity'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getStartOpacity'", nullptr);
+            return 0;
+        }
+        uint16_t ret = cobj->getStartOpacity();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getStartOpacity",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getStartOpacity'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_setCenter(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_setCenter'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::Vec2 arg0;
+
+        ok &= luaval_to_vec2(tolua_S, 2, &arg0, "cc.LayerRadialGradient:setCenter");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_setCenter'", nullptr);
+            return 0;
+        }
+        cobj->setCenter(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:setCenter",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_setCenter'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getEndColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getEndColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getEndColor'", nullptr);
+            return 0;
+        }
+        cocos2d::Color4B ret = cobj->getEndColor();
+        color4b_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getEndColor",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getEndColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_setStartOpacity(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_setStartOpacity'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        uint16_t arg0;
+
+        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "cc.LayerRadialGradient:setStartOpacity");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_setStartOpacity'", nullptr);
+            return 0;
+        }
+        cobj->setStartOpacity(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:setStartOpacity",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_setStartOpacity'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getCenter(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getCenter'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getCenter'", nullptr);
+            return 0;
+        }
+        cocos2d::Vec2 ret = cobj->getCenter();
+        vec2_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getCenter",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getCenter'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_setEndOpacity(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_setEndOpacity'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        uint16_t arg0;
+
+        ok &= luaval_to_uint16(tolua_S, 2,&arg0, "cc.LayerRadialGradient:setEndOpacity");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_setEndOpacity'", nullptr);
+            return 0;
+        }
+        cobj->setEndOpacity(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:setEndOpacity",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_setEndOpacity'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_setExpand(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_setExpand'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.LayerRadialGradient:setExpand");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_setExpand'", nullptr);
+            return 0;
+        }
+        cobj->setExpand(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:setExpand",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_setExpand'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getEndOpacity(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getEndOpacity'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getEndOpacity'", nullptr);
+            return 0;
+        }
+        uint16_t ret = cobj->getEndOpacity();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getEndOpacity",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getEndOpacity'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_initWithColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_initWithColor'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 5) 
+    {
+        cocos2d::Color4B arg0;
+        cocos2d::Color4B arg1;
+        double arg2;
+        cocos2d::Vec2 arg3;
+        double arg4;
+
+        ok &=luaval_to_color4b(tolua_S, 2, &arg0, "cc.LayerRadialGradient:initWithColor");
+
+        ok &=luaval_to_color4b(tolua_S, 3, &arg1, "cc.LayerRadialGradient:initWithColor");
+
+        ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.LayerRadialGradient:initWithColor");
+
+        ok &= luaval_to_vec2(tolua_S, 5, &arg3, "cc.LayerRadialGradient:initWithColor");
+
+        ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.LayerRadialGradient:initWithColor");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_initWithColor'", nullptr);
+            return 0;
+        }
+        bool ret = cobj->initWithColor(arg0, arg1, arg2, arg3, arg4);
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:initWithColor",argc, 5);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_initWithColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_setEndColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_setEndColor'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 1) {
+            cocos2d::Color4B arg0;
+            ok &=luaval_to_color4b(tolua_S, 2, &arg0, "cc.LayerRadialGradient:setEndColor");
+
+            if (!ok) { break; }
+            cobj->setEndColor(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            cocos2d::Color3B arg0;
+            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "cc.LayerRadialGradient:setEndColor");
+
+            if (!ok) { break; }
+            cobj->setEndColor(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.LayerRadialGradient:setEndColor",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_setEndColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getEndColor3B(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getEndColor3B'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getEndColor3B'", nullptr);
+            return 0;
+        }
+        cocos2d::Color3B ret = cobj->getEndColor3B();
+        color3b_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getEndColor3B",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getEndColor3B'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_setRadius(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_setRadius'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.LayerRadialGradient:setRadius");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_setRadius'", nullptr);
+            return 0;
+        }
+        cobj->setRadius(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:setRadius",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_setRadius'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_setStartColor(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_setStartColor'", nullptr);
+        return 0;
+    }
+#endif
+    argc = lua_gettop(tolua_S)-1;
+    do{
+        if (argc == 1) {
+            cocos2d::Color4B arg0;
+            ok &=luaval_to_color4b(tolua_S, 2, &arg0, "cc.LayerRadialGradient:setStartColor");
+
+            if (!ok) { break; }
+            cobj->setStartColor(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    do{
+        if (argc == 1) {
+            cocos2d::Color3B arg0;
+            ok &= luaval_to_color3b(tolua_S, 2, &arg0, "cc.LayerRadialGradient:setStartColor");
+
+            if (!ok) { break; }
+            cobj->setStartColor(arg0);
+            lua_settop(tolua_S, 1);
+            return 1;
+        }
+    }while(0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n",  "cc.LayerRadialGradient:setStartColor",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_setStartColor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getExpand(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getExpand'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getExpand'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getExpand();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getExpand",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getExpand'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_setBlendFunc(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_setBlendFunc'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::BlendFunc arg0;
+
+        ok &= luaval_to_blendfunc(tolua_S, 2, &arg0, "cc.LayerRadialGradient:setBlendFunc");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_setBlendFunc'", nullptr);
+            return 0;
+        }
+        cobj->setBlendFunc(arg0);
+        lua_settop(tolua_S, 1);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:setBlendFunc",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_setBlendFunc'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_getRadius(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LayerRadialGradient*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LayerRadialGradient_getRadius'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_getRadius'", nullptr);
+            return 0;
+        }
+        double ret = cobj->getRadius();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:getRadius",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_getRadius'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.LayerRadialGradient",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+
+    do 
+    {
+        if (argc == 0)
+        {
+            cocos2d::LayerRadialGradient* ret = cocos2d::LayerRadialGradient::create();
+            object_to_luaval<cocos2d::LayerRadialGradient>(tolua_S, "cc.LayerRadialGradient",(cocos2d::LayerRadialGradient*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    do 
+    {
+        if (argc == 5)
+        {
+            cocos2d::Color4B arg0;
+            ok &=luaval_to_color4b(tolua_S, 2, &arg0, "cc.LayerRadialGradient:create");
+            if (!ok) { break; }
+            cocos2d::Color4B arg1;
+            ok &=luaval_to_color4b(tolua_S, 3, &arg1, "cc.LayerRadialGradient:create");
+            if (!ok) { break; }
+            double arg2;
+            ok &= luaval_to_number(tolua_S, 4,&arg2, "cc.LayerRadialGradient:create");
+            if (!ok) { break; }
+            cocos2d::Vec2 arg3;
+            ok &= luaval_to_vec2(tolua_S, 5, &arg3, "cc.LayerRadialGradient:create");
+            if (!ok) { break; }
+            double arg4;
+            ok &= luaval_to_number(tolua_S, 6,&arg4, "cc.LayerRadialGradient:create");
+            if (!ok) { break; }
+            cocos2d::LayerRadialGradient* ret = cocos2d::LayerRadialGradient::create(arg0, arg1, arg2, arg3, arg4);
+            object_to_luaval<cocos2d::LayerRadialGradient>(tolua_S, "cc.LayerRadialGradient",(cocos2d::LayerRadialGradient*)ret);
+            return 1;
+        }
+    } while (0);
+    ok  = true;
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d", "cc.LayerRadialGradient:create",argc, 5);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_create'.",&tolua_err);
+#endif
+    return 0;
+}
+int lua_cocos2dx_LayerRadialGradient_constructor(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LayerRadialGradient* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_LayerRadialGradient_constructor'", nullptr);
+            return 0;
+        }
+        cobj = new cocos2d::LayerRadialGradient();
+        cobj->autorelease();
+        int ID =  (int)cobj->_ID ;
+        int* luaID =  &cobj->_luaID ;
+        toluafix_pushusertype_ccobject(tolua_S, ID, luaID, (void*)cobj,"cc.LayerRadialGradient");
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "cc.LayerRadialGradient:LayerRadialGradient",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LayerRadialGradient_constructor'.",&tolua_err);
+#endif
+
+    return 0;
+}
+
+static int lua_cocos2dx_LayerRadialGradient_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (LayerRadialGradient)");
+    return 0;
+}
+
+int lua_register_cocos2dx_LayerRadialGradient(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"cc.LayerRadialGradient");
+    tolua_cclass(tolua_S,"LayerRadialGradient","cc.LayerRadialGradient","cc.Layer",nullptr);
+
+    tolua_beginmodule(tolua_S,"LayerRadialGradient");
+        tolua_function(tolua_S,"new",lua_cocos2dx_LayerRadialGradient_constructor);
+        tolua_function(tolua_S,"getStartColor",lua_cocos2dx_LayerRadialGradient_getStartColor);
+        tolua_function(tolua_S,"getBlendFunc",lua_cocos2dx_LayerRadialGradient_getBlendFunc);
+        tolua_function(tolua_S,"getStartColor3B",lua_cocos2dx_LayerRadialGradient_getStartColor3B);
+        tolua_function(tolua_S,"getStartOpacity",lua_cocos2dx_LayerRadialGradient_getStartOpacity);
+        tolua_function(tolua_S,"setCenter",lua_cocos2dx_LayerRadialGradient_setCenter);
+        tolua_function(tolua_S,"getEndColor",lua_cocos2dx_LayerRadialGradient_getEndColor);
+        tolua_function(tolua_S,"setStartOpacity",lua_cocos2dx_LayerRadialGradient_setStartOpacity);
+        tolua_function(tolua_S,"getCenter",lua_cocos2dx_LayerRadialGradient_getCenter);
+        tolua_function(tolua_S,"setEndOpacity",lua_cocos2dx_LayerRadialGradient_setEndOpacity);
+        tolua_function(tolua_S,"setExpand",lua_cocos2dx_LayerRadialGradient_setExpand);
+        tolua_function(tolua_S,"getEndOpacity",lua_cocos2dx_LayerRadialGradient_getEndOpacity);
+        tolua_function(tolua_S,"initWithColor",lua_cocos2dx_LayerRadialGradient_initWithColor);
+        tolua_function(tolua_S,"setEndColor",lua_cocos2dx_LayerRadialGradient_setEndColor);
+        tolua_function(tolua_S,"getEndColor3B",lua_cocos2dx_LayerRadialGradient_getEndColor3B);
+        tolua_function(tolua_S,"setRadius",lua_cocos2dx_LayerRadialGradient_setRadius);
+        tolua_function(tolua_S,"setStartColor",lua_cocos2dx_LayerRadialGradient_setStartColor);
+        tolua_function(tolua_S,"getExpand",lua_cocos2dx_LayerRadialGradient_getExpand);
+        tolua_function(tolua_S,"setBlendFunc",lua_cocos2dx_LayerRadialGradient_setBlendFunc);
+        tolua_function(tolua_S,"getRadius",lua_cocos2dx_LayerRadialGradient_getRadius);
+        tolua_function(tolua_S,"create", lua_cocos2dx_LayerRadialGradient_create);
+    tolua_endmodule(tolua_S);
+    std::string typeName = typeid(cocos2d::LayerRadialGradient).name();
+    g_luaType[typeName] = "cc.LayerRadialGradient";
+    g_typeCast["LayerRadialGradient"] = "cc.LayerRadialGradient";
     return 1;
 }
 
@@ -102425,6 +103706,7 @@ TOLUA_API int register_all_cocos2dx(lua_State* tolua_S)
 	lua_register_cocos2dx_EaseOut(tolua_S);
 	lua_register_cocos2dx_MenuItemFont(tolua_S);
 	lua_register_cocos2dx_TransitionFadeUp(tolua_S);
+	lua_register_cocos2dx_LayerRadialGradient(tolua_S);
 	lua_register_cocos2dx_EaseSineOut(tolua_S);
 	lua_register_cocos2dx_JumpTiles3D(tolua_S);
 	lua_register_cocos2dx_MenuItemToggle(tolua_S);
