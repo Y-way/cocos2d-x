@@ -67,6 +67,7 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     private Cocos2dxWebViewHelper mWebViewHelper = null;
     private Cocos2dxEditBoxHelper mEditBoxHelper = null;
     private boolean hasFocus = false;
+    private boolean showVirtualButton = false;
 
     public Cocos2dxGLSurfaceView getGLSurfaceView(){
         return  mGLSurfaceView;
@@ -85,7 +86,11 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
             }
         });
     }
-    
+
+    public void setEnableVirtualButton(boolean value) {
+        this.showVirtualButton = value;
+    }
+
     protected void onLoadNativeLibraries() {
         try {
             ApplicationInfo ai = getPackageManager().getApplicationInfo(getPackageName(), PackageManager.GET_META_DATA);
@@ -267,15 +272,17 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
         //this line is need on some device if we specify an alpha bits
         if(this.mGLContextAttrs[3] > 0) glSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
 
-        // use custom EGLConfigureChooser and EGLContextFactory
+        // use custom EGLConfigureChooser
         Cocos2dxEGLConfigChooser chooser = new Cocos2dxEGLConfigChooser(this.mGLContextAttrs);
         glSurfaceView.setEGLConfigChooser(chooser);
-        glSurfaceView.setEGLContextFactory(new ContextFactory());
 
         return glSurfaceView;
     }
 
     protected void hideVirtualButton() {
+        if (showVirtualButton) {
+            return;
+        }
 
         if (Build.VERSION.SDK_INT >= 19) {
             // use reflection to remove dependence of API level
@@ -379,25 +386,6 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
                 return configs[0];
             }
             return null;
-        }
-    }
-
-    private static class ContextFactory implements GLSurfaceView.EGLContextFactory {
-
-        private static int EGL_CONTEXT_CLIENT_VERSION = 0x3098;
-
-        public EGLContext createContext(
-            EGL10 egl, EGLDisplay display, EGLConfig eglConfig) {
-            
-            int[] attributes = {EGL_CONTEXT_CLIENT_VERSION, 2, EGL10.EGL_NONE };
-            EGLContext context = egl.eglCreateContext(
-                display, eglConfig, EGL10.EGL_NO_CONTEXT, attributes);
-
-            return context;
-        }
-
-        public void destroyContext(EGL10 egl, EGLDisplay display, EGLContext context) {
-            egl.eglDestroyContext(display, context);
         }
     }
 }
