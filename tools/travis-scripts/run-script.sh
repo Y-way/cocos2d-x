@@ -66,16 +66,16 @@ function build_android()
     popd
 
     # build lua-tests
-    src_dir=$dst_dir
-    dst_dir=$COCOS2DX_ROOT/tests/lua-tests/project/proj.android/obj/
-    mkdir $dst_dir
-    cp -a $src_dir/* $dst_dir
+    # src_dir=$dst_dir
+    # dst_dir=$COCOS2DX_ROOT/tests/lua-tests/project/proj.android/obj/
+    # mkdir $dst_dir
+    # cp -a $src_dir/* $dst_dir
     pushd $COCOS2DX_ROOT/tests/lua-tests
     cocos compile -p android
     popd
 
     # build js-tests
-    src_dir=$dst_dir
+    src_dir=$COCOS2DX_ROOT/tests/lua-tests/project/proj.android/obj/
     dst_dir=$COCOS2DX_ROOT/tests/js-tests/project/proj.android/obj/
     mkdir $dst_dir
     cp -a $src_dir/* $dst_dir
@@ -91,12 +91,7 @@ function genernate_binding_codes()
     which python
 
     export NDK_ROOT=$HOME/bin/android-ndk
-
-    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-        export PYTHON_BIN=/usr/local/bin/python
-    else
-        export PYTHON_BIN=/usr/bin/python
-    fi
+    export PYTHON_BIN=/usr/bin/python
 
     # Generate binding glue codes
 

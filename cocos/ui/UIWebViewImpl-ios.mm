@@ -68,7 +68,7 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
 @property(nonatomic, readonly, getter=canGoBack) BOOL canGoBack;
 @property(nonatomic, readonly, getter=canGoForward) BOOL canGoForward;
 
-+ (instancetype)webViewWrapper;
++ (instancetype)newWebViewWrapper;
 
 - (void)setVisible:(bool)visible;
 
@@ -115,8 +115,8 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
     
 }
 
-+ (instancetype)webViewWrapper {
-    return [[[self alloc] init] autorelease];
++ (instancetype) newWebViewWrapper {
+    return [[self alloc] init];
 }
 
 - (instancetype)init {
@@ -133,6 +133,7 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
 - (void)dealloc {
     self.uiWebView.delegate = nil;
     [self.uiWebView removeFromSuperview];
+    [self.uiWebView release];
     self.uiWebView = nil;
     self.jsScheme = nil;
     [super dealloc];
@@ -140,7 +141,7 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
 
 - (void)setupWebView {
     if (!self.uiWebView) {
-        self.uiWebView = [[[UIWebView alloc] init] autorelease];
+        self.uiWebView = [[UIWebView alloc] init];
         self.uiWebView.delegate = self;
     }
     if (!self.uiWebView.superview) {
@@ -151,6 +152,7 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
 }
 
 - (void)setVisible:(bool)visible {
+    if (!self.uiWebView) {[self setupWebView];}
     self.uiWebView.hidden = !visible;
 }
 
@@ -159,6 +161,7 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
 }
 
 - (void)setOpacityWebView:(float)opacity {
+    if (!self.uiWebView) {[self setupWebView];}
     self.uiWebView.alpha=opacity;
     [self.uiWebView setOpaque:NO];
 }
@@ -168,6 +171,8 @@ static std::string getFixedBaseUrl(const std::string& baseUrl)
 }
 
 -(void) setBackgroundTransparent{
+    if (!self.uiWebView) {[self setupWebView];}
+    [self.uiWebView setOpaque:NO];
     [self.uiWebView setBackgroundColor:[UIColor clearColor]];
 }
 
@@ -291,9 +296,8 @@ namespace experimental {
     namespace ui{
 
 WebViewImpl::WebViewImpl(WebView *webView)
-        : _uiWebViewWrapper([UIWebViewWrapper webViewWrapper]),
+        : _uiWebViewWrapper([UIWebViewWrapper newWebViewWrapper]),
         _webView(webView) {
-    [_uiWebViewWrapper retain];
             
     _uiWebViewWrapper.shouldStartLoading = [this](std::string url) {
         if (this->_webView->_onShouldStartLoading) {

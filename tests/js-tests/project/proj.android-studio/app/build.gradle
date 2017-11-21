@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion PROP_COMPILE_SDK_VERSION.toInteger()
-    buildToolsVersion "22.0.1"
+    buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "org.cocos2dx.js_tests"
@@ -20,19 +20,6 @@ android {
                     targets 'js_tests'
                     arguments 'NDK_TOOLCHAIN_VERSION=4.9'
                     arguments 'APP_PLATFORM=android-'+PROP_APP_PLATFORM
-                    
-                    def module_paths = [project.file("../../../../..").absolutePath,
-                                        project.file("../../../../../cocos").absolutePath,
-                                        project.file("../../../../../external").absolutePath]
-                    if (Os.isFamily(Os.FAMILY_WINDOWS)) {
-                        // should use '/'
-                        module_paths = module_paths.collect {it.replaceAll('\\\\', '/')}
-                        arguments 'NDK_MODULE_PATH=' + module_paths.join(";")
-                    }
-                    else {
-                        arguments 'NDK_MODULE_PATH=' + module_paths.join(':')
-                    }
-
                     arguments '-j' + Runtime.runtime.availableProcessors()
                     abiFilters.addAll(PROP_APP_ABI.split(':').collect{it as String})
                 }
@@ -135,6 +122,11 @@ android.applicationVariants.all { variant ->
         copy {
            from "${buildDir}/../../../../res"
            into "${buildDir}/intermediates/assets/${variant.dirName}/res"
+        }
+
+        copy {
+            from "${buildDir}/../../../../resjs"
+            into "${buildDir}/intermediates/assets/${variant.dirName}/res/resjs"
         }
 
         copy {
